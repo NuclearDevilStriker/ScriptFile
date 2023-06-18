@@ -1,1 +1,13 @@
-config
+{
+  "listen": ":5666",
+  "cert": "/etc/hysteria/server.crt",
+  "key": "/etc/hysteria/server.key",
+  "up_mbps": 100,
+  "down_mbps": 100,
+  "disable_udp": false,
+  "obfs": "dex",
+  "auth": {
+    "mode": "passwords",
+    "config": ["mtkvpn", "stronghold3"]
+  }
+}
