@@ -1,0 +1,16 @@
+{
+  "listen": ":5666",
+  "cert": "/etc/hysteria/server.crt",
+  "key": "/etc/hysteria/server.key",
+  "up_mbps": 100,
+  "down_mbps": 100,
+  "disable_udp": false,
+  "obfs": "dex",
+  "auth": {
+    "mode": "external",
+    "config": {
+    "cmd": "./.auth.sh"
+    }
+  },
+  "prometheus_listen": ":5665",
+}
