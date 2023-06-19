@@ -1,7 +1,5 @@
 #!/bin/bash
 ln -fs /usr/share/zoneinfo/Asia/Manila /etc/localtime
-sed -i "s/SELINUX=enforcing/SELINUX=disabled/g" /etc/selinux/config &> /dev/null
-#change this according to your database details
 
 clear
 cd ~
