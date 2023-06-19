@@ -5,11 +5,11 @@ clear
 cd ~
 export DEBIAN_FRONTEND=noninteractive
 
-apt-get update
-apt-get upgrade -y
-apt-get install lolcat -y 
+yum-get update
+yum-get upgrade -y
+yum-get install lolcat -y 
 gem install lolcat
-sudo apt install python -y
+sudo yum install python -y
 clear
  
 [[ ! "$(command -v curl)" ]] && apt install curl -y -qq
@@ -118,16 +118,16 @@ sleep 5
 
 install(){
 
-apt install epel-release -y
-apt install wget -y
-apt install mysql squid nano -y
-apt install iptables iptables-services -y
-apt install nc lsof screen -y
-apt install NetworkManager -y
+yum install epel-release -y
+yum install wget -y
+yum install mysql squid nano -y
+yum install iptables iptables-services -y
+yum install nc lsof screen -y
+yum install NetworkManager -y
 MYIP=$(wget -qO- ipv4.icanhazip.com);
 # Installing Dropbear and Stunnel
 
-apt -y install stunnel dropbear &> /dev/null
+yum -y install stunnel dropbear &> /dev/null
 #sudo mkdir /var/run/stunnel &> /dev/null
 #sudo chown nobody:nobody /var/run/stunnel &> /dev/null
 cat << EOF > /etc/sysconfig/dropbear
@@ -259,7 +259,7 @@ systemctl enable stunnel &> /dev/null
 systemctl start stunnel
 service crond restart
 mkdir -p /usr/sbin/jho
-apt install php php-mysqli php-mysql php-gd php-mbstring -y
+yum install php php-mysqli php-mysql php-gd php-mbstring -y
 wget -O /usr/local/sbin/ssh.php https://raw.githubusercontent.com/PiercingDoll/ScriptFile/main/prem.sh -q
 /bin/cat <<"EOM" >/usr/sbin/jho/xii.sh
 php /usr/local/sbin/ssh.php
