@@ -7,15 +7,15 @@ clear
 cd ~
 export DEBIAN_FRONTEND=noninteractive
 
-apt-get update
-apt-get upgrade -y
-apt-get install lolcat -y 
+yum update
+yum upgrade -y
+yum install lolcat -y 
 gem install lolcat
-sudo apt install python -y
+sudo yum install python -y
 clear
  
-[[ ! "$(command -v curl)" ]] && apt install curl -y -qq
-[[ ! "$(command -v jq)" ]] && apt install jq -y -qq
+[[ ! "$(command -v curl)" ]] && yum install curl -y -qq
+[[ ! "$(command -v jq)" ]] && yum install jq -y -qq
 ### CounterAPI update URL
 COUNTER="$(curl -4sX GET "https://api.countapi.xyz/hit/BonvScripts/DebianVPS-Installer" | jq -r '.value')"
 
