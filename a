@@ -6,10 +6,12 @@ sed -i "s/SELINUX=enforcing/SELINUX=disabled/g" /etc/selinux/config &> /dev/null
 clear
 cd ~
 export DEBIAN_FRONTEND=noninteractive
-
-yum update
+ 
+yum update -y
 yum upgrade -y
+yum install epel-release -y
 yum install lolcat -y 
+yum install ruby
 gem install lolcat
 sudo yum install python -y
 clear
@@ -120,7 +122,6 @@ sleep 5
 
 install(){
 
-yum install epel-release -y
 yum install wget -y
 yum install mysql squid nano -y
 yum install iptables iptables-services -y
@@ -129,7 +130,7 @@ yum install NetworkManager -y
 MYIP=$(wget -qO- ipv4.icanhazip.com);
 # Installing Dropbear and Stunnel
 
-apt -y install stunnel dropbear &> /dev/null
+yum -y install stunnel dropbear &> /dev/null
 #sudo mkdir /var/run/stunnel &> /dev/null
 #sudo chown nobody:nobody /var/run/stunnel &> /dev/null
 cat << EOF > /etc/sysconfig/dropbear
