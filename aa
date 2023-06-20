@@ -122,7 +122,7 @@ sleep 5
 
 install(){
 
-yum install wget -y
+yum install screen
 yum install mysql squid nano -y
 yum install iptables iptables-services -y
 yum install nc lsof screen -y
