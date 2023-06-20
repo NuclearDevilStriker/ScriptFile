@@ -124,9 +124,7 @@ ps x | grep 'udpvpn' | grep -v 'grep' || screen -dmS udpvpn /usr/bin/badvpn-udpg
 }
 
 create_hostname() {
-
 clear
-
 echo 'Creating hostname.'
 {
 cat << EOF > /etc/hysteria/server.crt
