@@ -350,6 +350,7 @@ echo -e " \033[0;35m════════════════════
 echo -e " \033[0;33m Hysteria Configuration: \033[0m"
 echo -e ""
 echo -e " \e[92m Hysteria Dns:\e[0m \e[97m: $MYDNS\e[0m"
+echo -e " \e[92m BadVpn:\e[0m \e[97m: 7300\e[0m"
 echo -e " \e[92m Hysteria Port:\e[0m \e[97m: 5666\e[0m"
 echo -e " \e[92m Obfs:\e[0m \e[97m: dex\e[0m"
 echo -e " \e[92m Password:\e[0m \e[97m: mtkvpn\e[0m"
