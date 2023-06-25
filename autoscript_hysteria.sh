@@ -20,6 +20,7 @@ echo '
    ██████╔╝███████╗██╔╝ ██╗   ██║   ███████╗██║  ██║
    ╚═════╝ ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝  
  '
+ echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
  echo -e " \033[0;31m Wait 5 Seconds To Start Installing!!!\033[0m"
  sleep 5
 
@@ -29,7 +30,7 @@ set -e
 # SCRIPT CONFIGURATION
 ###
 
-  read -rp "Please enter Protocol (default：udp)：" PROTOCOL
+  read -rp "Please enter Protocol (default：udp): " PROTOCOL
   [ -z "$PROTOCOL" ] && PROTOCOL="ws"
 
   clear
