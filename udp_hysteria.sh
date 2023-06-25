@@ -30,7 +30,7 @@ DOMAIN="your_domain"
 PROTOCOL="udp"
 
 # UDP PORT
-UDP_PORT=":20000-50000"
+UDP_PORT=":5666"
 
 # OBFS
 OBFS="your_obfs"
