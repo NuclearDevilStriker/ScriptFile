@@ -940,18 +940,26 @@ perform_install() {
 						setup_ssl
 					        start_services
 						if [[ -n "$_is_frash_install" ]]; then
-							echo
-							echo -e "$(tbold)Congratulation! UDP has been successfully installed on your server.$(treset)"
-							echo
-							echo -e "$(tbold)Client app AGN INJECTOR:$(treset)"
-							echo -e "$(tblue)https://play.google.com/store/apps/details?id=com.agn.injector$(treset)"
-							echo
-							echo -e "UDP PERROS"
-							echo
-							echo -e "\t+ TETS: $(tblue)CONEXION UDP COMPATIBLE CO SOCKS INJECTOR$(treset)"
-							echo -e "\t+ TEST: $(tblue)PRUEBA UDP $(treset)"
-							echo -e "\t+ TEST: $(tblue)😑😑😑😑😑😑😑😑$(treset)"
-							echo
+							echo -e ""
+echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
+echo '                                                              
+   ██████╗ ███████╗██╗  ██╗████████╗███████╗██████╗ 
+   ██╔══██╗██╔════╝╚██╗██╔╝╚══██╔══╝██╔════╝██╔══██╗
+   ██║  ██║█████╗   ╚███╔╝    ██║   █████╗  ██████╔╝
+   ██║  ██║██╔══╝   ██╔██╗    ██║   ██╔══╝  ██╔══██╗
+   ██████╔╝███████╗██╔╝ ██╗   ██║   ███████╗██║  ██║
+   ╚═════╝ ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝  
+ '
+echo -e "$(tbold)Congratulation! UDP has been successfully installed on your server.$(treset)"
+echo -e""
+echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
+echo -e " \033[0;33m Hysteria Configuration: \033[0m"
+echo -e ""
+echo -e " \e[92m Hysteria Port:\e[0m \e[97m: $DOMAIN\e[0m"
+echo -e " \e[92m Hysteria Port:\e[0m \e[97m: 5666\e[0m"
+echo -e " \e[92m Obfs:\e[0m \e[97m: $OBFS\e[0m"
+echo -e " \e[92m Password:\e[0m \e[97m: $PASSWORD\e[0m"
+echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
 							else
 								restart_running_services
 								
