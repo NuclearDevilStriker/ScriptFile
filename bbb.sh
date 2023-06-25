@@ -5,30 +5,34 @@ function hysteria_port() {
   [ -z "$UDP_PORT" ] && UDP_PORT="5666"
   if [[ $UDP_PORT -le 0 ]] || [[ $UDP_PORT -gt 65535 ]]; then
     print_error "Please enter a value between 0-65535"
+    exit 1
   fi
  }
  
- function hyteria_domain() {
+ function hysteria_domain() {
   read -rp "Please enter your domain (example：dexterpogi.mediatek.xyz)：" DOMAIN
   [ -z "$DOMAIN" ] && DOMAIN="dexterpogi.mediatek.xyz"
   if [[ $DOMAIN -le 0 ]] || [[ $DOMAIN -gt 65535 ]]; then
     print_error "Please enter a value between 0-65535"
+    exit 1
   fi
  }
  
- function hyteria_obfs() {
+ function hysteria_obfs() {
   read -rp "Please enter your OBFS (example：mediatekvpn)：" OBFS
   [ -z "$OBFS" ] && OBFS="mediatekvpn"
   if [[ $OBFS -le 0 ]] || [[ $OBFS -gt 65535 ]]; then
     print_error "Please enter a value between 0-65535"
+    exit 1
   fi
  }
  
- function hyteria_password() {
+ function hysteria_password() {
   read -rp "Please enter your paasword (example：dexterpogi：" PASSWORD
   [ -z "$PASSWORD" ] && PASSWORD="dexterpogi"
   if [[ $PASSWORD -le 0 ]] || [[ $PASSWORD -gt 65535 ]]; then
     print_error "Please enter a value between 0-65535"
+    exit 1
   fi
  }
 
