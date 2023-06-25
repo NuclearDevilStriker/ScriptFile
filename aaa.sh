@@ -11,4 +11,4 @@ function modify_port() {
 
 modify_port
  
-echo -e " \e[92m Hysteria Port:\e[0m \e[97m: $DOMAIN\e[0m"
+echo -e " \e[92m Hysteria Port:\e[0m \e[97m: $UDP_PORT\e[0m"
