@@ -5,6 +5,8 @@
 # (c) 2023 UDP PERROS
 #
 
+UDP_PORT="5666"
+
 apt-get update
 apt-get upgrade -y
 clear
@@ -29,9 +31,6 @@ set -e
 
   read -rp "Please enter Protocol (default：udp)：" PROTOCOL
   [ -z "$PROTOCOL" ] && PROTOCOL="ws"
-
-  read -rp "Please enter the port number (default：5666)：" UDP_PORT
-  [ -z "$UDP_PORT" ] && UDP_PORT="6666"
 
   clear
   read -rp "Please enter your Host DNS：" DOMAIN
