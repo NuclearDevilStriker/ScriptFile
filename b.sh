@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-function hyteria_port() {
+function hysteria_port() {
   read -rp "Please enter the port number (default：5666)：" UDP_PORT
   [ -z "$UDP_PORT" ] && UDP_PORT="5666"
   if [[ $UDP_PORT -le 0 ]] || [[ $UDP_PORT -gt 65535 ]]; then
@@ -39,10 +39,10 @@ function hyteria_port() {
 
 
 
-modify_port
-hyteria_domain
-hyteria_obfs
-hyteria_password
+hysteria_port
+hysteria_domain
+hysteria_obfs
+hysteria_password
  
 echo -e " \e[92m Hysteria Port:\e[0m \e[97m: $UDP_PORT\e[0m"
 echo -e " \e[92m Hysteria Domain:\e[0m \e[97m: $DOMAIN\e[0m"
