@@ -4,28 +4,24 @@ function hysteria_port() {
   read -rp "Please enter the port number (default：5666)：" UDP_PORT
   [ -z "$UDP_PORT" ] && UDP_PORT="5666"
     exit 1
-  fi
  }
  
  function hysteria_domain() {
   read -rp "Please enter your domain (example：dexterpogi.mediatek.xyz)：" DOMAIN
   [ -z "$DOMAIN" ] && DOMAIN="dexterpogi.mediatek.xyz"
     exit 1
-  fi
  }
  
  function hysteria_obfs() {
   read -rp "Please enter your OBFS (example：mediatekvpn)：" OBFS
   [ -z "$OBFS" ] && OBFS="mediatekvpn"
     exit 1
-  fi
  }
  
  function hysteria_password() {
   read -rp "Please enter your paasword (example：dexterpogi：" PASSWORD
   [ -z "$PASSWORD" ] && PASSWORD="dexterpogi"
     exit 1
-  fi
  }
 
 
