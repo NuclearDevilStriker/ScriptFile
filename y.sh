@@ -27,29 +27,24 @@ set -e
 # SCRIPT CONFIGURATION
 ###
 
-hysteria_protocol() {
   read -rp "Please enter Protocol (default：udp)：" PROTOCOL
   [ -z "$PROTOCOL" ] && PROTOCOL="ws"
- }
+
   read -rp "Please enter the port number (default：5666)：" UDP_PORT
   [ -z "$UDP_PORT" ] && UDP_PORT="6666"
- }
+
   clear
   read -rp "Please enter your Host DNS：" DOMAIN
   [ -z "$DOMAIN" ] && DOMAIN="dexterpogi.mediatek.xyz"
- }
+
   clear
   read -rp "Please enter your OBFS：" OBFS
   [ -z "$OBFS" ] && OBFS="mediatekvpn"
- }
+
   clear
   read -rp "\e[92mPlease enter your password：" PASSWORD
   [ -z "$PASSWORD" ] && PASSWORD="dexterpogi"
-}
-}
 
-
-hysteria_protocol
 
 
 # Basename of this script
