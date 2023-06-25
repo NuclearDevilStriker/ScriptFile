@@ -8,21 +8,21 @@ function hysteria_port() {
  
  function hysteria_domain() {
   clear
-  read -rp "Please enter your Dns Ip (example：dexterpogi.mediatek.xyz)：" DOMAIN
+  read -rp "Please enter your Host DNS：" DOMAIN
   [ -z "$DOMAIN" ] && DOMAIN="dexterpogi.mediatek.xyz"
 
  }
  
  function hysteria_obfs() {
   clear
-  read -rp "Please enter your OBFS (example：mediatekvpn)：" OBFS
+  read -rp "Please enter your OBFS：" OBFS
   [ -z "$OBFS" ] && OBFS="mediatekvpn"
 
  }
  
  function hysteria_password() {
   clear
-  read -rp "\e[92mPlease enter your password (example：dexterpogi)：" PASSWORD
+  read -rp "\e[92mPlease enter your password：" PASSWORD
   [ -z "$PASSWORD" ] && PASSWORD="dexterpogi"
 
  }
