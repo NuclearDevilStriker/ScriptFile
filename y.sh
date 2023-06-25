@@ -42,7 +42,7 @@ set -e
   [ -z "$OBFS" ] && OBFS="mediatekvpn"
 
   clear
-  read -rp "\e[92mPlease enter your password：" PASSWORD
+  read -rp "Please enter your password：" PASSWORD
   [ -z "$PASSWORD" ] && PASSWORD="dexterpogi"
 
 
