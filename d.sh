@@ -1,25 +1,28 @@
 #!/usr/bin/bash
 
 function hysteria_port() {
-  read -rp "\e[92mPlease enter the port number (default：5666)：\e[0m \e[97m" UDP_PORT
-  [ -z "$UDP_PORT" ] && UDP_PORT="5666"
+  read -rp "Please enter the port number (default：5666)：" UDP_PORT
+  [ -z "$UDP_PORT" ] && UDP_PORT="6666"
 
  }
  
  function hysteria_domain() {
-  read -rp "\e[92mPlease enter your domain (example：dexterpogi.mediatek.xyz)\e[0m \e[97m：" DOMAIN
+  clear
+  read -rp "Please enter your Dns Ip (example：dexterpogi.mediatek.xyz)：" DOMAIN
   [ -z "$DOMAIN" ] && DOMAIN="dexterpogi.mediatek.xyz"
 
  }
  
  function hysteria_obfs() {
-  read -rp "\e[92mPlease enter your OBFS (example：mediatekvpn)\e[0m \e[97m：" OBFS
+  clear
+  read -rp "Please enter your OBFS (example：mediatekvpn)：" OBFS
   [ -z "$OBFS" ] && OBFS="mediatekvpn"
 
  }
  
  function hysteria_password() {
-  read -rp "\e[92mPlease enter your paasword (example：dexterpogi\e[0m \e[97m：" PASSWORD
+  clear
+  read -rp "\e[92mPlease enter your password (example：dexterpogi)：" PASSWORD
   [ -z "$PASSWORD" ] && PASSWORD="dexterpogi"
 
  }
