@@ -5,7 +5,7 @@
 # (c) 2023 UDP PERROS
 #
 
-UDP_PORT="5666"
+UDP_PORT=":5666"
 
 apt-get update
 apt-get upgrade -y
