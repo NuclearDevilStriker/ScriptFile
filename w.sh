@@ -28,16 +28,18 @@ set -e
 ###
 
 function hysteria_protocol() {
-  read -rp "Please enter the port number (default：udp)：" PROTOCOL
+  read -rp "Please enter Protocol (default：udp)：" PROTOCOL
   [ -z "$PROTOCOL" ] && PROTOCOL="ws"
 
  }
+ hysteria_protocol
 
 function hysteria_port() {
   read -rp "Please enter the port number (default：5666)：" UDP_PORT
   [ -z "$UDP_PORT" ] && UDP_PORT="6666"
 
  }
+ hysteria_port
  
  function hysteria_domain() {
   clear
@@ -45,6 +47,7 @@ function hysteria_port() {
   [ -z "$DOMAIN" ] && DOMAIN="dexterpogi.mediatek.xyz"
 
  }
+ hysteria_domain
  
  function hysteria_obfs() {
   clear
@@ -52,6 +55,7 @@ function hysteria_port() {
   [ -z "$OBFS" ] && OBFS="mediatekvpn"
 
  }
+ hysteria_obfs
  
  function hysteria_password() {
   clear
@@ -59,12 +63,9 @@ function hysteria_port() {
   [ -z "$PASSWORD" ] && PASSWORD="dexterpogi"
 
  }
-
-hysteria_protocol
-hysteria_port
-hysteria_domain
-hysteria_obfs
 hysteria_password
+
+
 
 # Basename of this script
 SCRIPT_NAME="$(basename "$0")"
