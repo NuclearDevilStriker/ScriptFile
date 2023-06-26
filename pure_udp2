@@ -938,8 +938,6 @@ perform_install() {
 					_is_update_required=1
 					fi
 					
-						return
-						fi
 						perform_install_hysteria_binary
 						perform_install_hysteria_example_config
 						perform_install_hysteria_home_legacy
