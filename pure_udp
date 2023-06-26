@@ -6,6 +6,8 @@
 #
 
 UDP_PORT=":5666"
+PROTOCOL="udp"
+
 
 apt-get update
 apt-get upgrade -y
@@ -30,8 +32,6 @@ set -e
 # SCRIPT CONFIGURATION
 ###
 
-  read -rp "Please enter Protocol (default：udp): " PROTOCOL
-  [ -z "$PROTOCOL" ] && PROTOCOL="ws"
 
   clear
   read -rp "Please enter your Host DNS：" DOMAIN
@@ -558,6 +558,105 @@ check_hysteria_homedir() {
 			HYSTERIA_HOME_DIR="$(eval echo ~"$HYSTERIA_USER")"
 }
 
+
+###
+# ARGUMENTS PARSER
+###
+
+show_usage_and_exit() {
+	echo
+	echo -e "\t$(tbold)$SCRIPT_NAME$(treset) - AGN-UDP server install script"
+	echo
+	echo -e "Usage:"
+	echo
+	echo -e "$(tbold)Install AGN-UDP$(treset)"
+	echo -e "\t$0 [ -f | -l <file> | --version <version> ]"
+	echo -e "Flags:"
+	echo -e "\t-f, --force\tForce re-install latest or specified version even if it has been installed."
+	echo -e "\t-l, --local <file>\tInstall specified AGN-UDP binary instead of download it."
+	echo -e "\t--version <version>\tInstall specified version instead of the latest."
+	echo
+	echo -e "$(tbold)Remove AGN-UDP$(treset)"
+	echo -e "\t$0 --remove"
+	echo
+	echo -e "$(tbold)Check for the update$(treset)"
+	echo -e "\t$0 -c"
+	echo -e "\t$0 --check"
+	echo
+	echo -e "$(tbold)Show this help$(treset)"
+	echo -e "\t$0 -h"
+	echo -e "\t$0 --help"
+	exit 0
+}
+
+parse_arguments() {
+	while [[ "$#" -gt '0' ]]; do
+		case "$1" in
+		'--remove')
+		if [[ -n "$OPERATION" && "$OPERATION" != 'remove' ]]; then
+			show_argument_error_and_exit "Option '--remove' is conflicted with other options."
+			fi
+			OPERATION='remove'
+			;;
+		'--version')
+		VERSION="$2"
+		if [[ -z "$VERSION" ]]; then
+			show_argument_error_and_exit "Please specify the version for option '--version'."
+			fi
+			shift
+			if ! has_prefix "$VERSION" 'v'; then
+				show_argument_error_and_exit "Version numbers should begin with 'v' (such like 'v1.3.1'), got '$VERSION'"
+				fi
+				;;
+			'-c' | '--check')
+			if [[ -n "$OPERATION" && "$OPERATION" != 'check' ]]; then
+				show_argument_error_and_exit "Option '-c' or '--check' is conflicted with other option."
+				fi
+				OPERATION='check_update'
+				;;
+			'-f' | '--force')
+			FORCE='1'
+			;;
+			'-h' | '--help')
+			show_usage_and_exit
+			;;
+			'-l' | '--local')
+			LOCAL_FILE="$2"
+			if [[ -z "$LOCAL_FILE" ]]; then
+				show_argument_error_and_exit "Please specify the local binary to install for option '-l' or '--local'."
+				fi
+				break
+				;;
+			*)
+			show_argument_error_and_exit "Unknown option '$1'"
+			;;
+			esac
+			shift
+			done
+			
+			if [[ -z "$OPERATION" ]]; then
+				OPERATION='install'
+				fi
+				
+				# validate arguments
+				case "$OPERATION" in
+				'install')
+				if [[ -n "$VERSION" && -n "$LOCAL_FILE" ]]; then
+					show_argument_error_and_exit '--version and --local cannot be specified together.'
+					fi
+					;;
+				*)
+				if [[ -n "$VERSION" ]]; then
+					show_argument_error_and_exit "--version is only avaiable when install."
+					fi
+					if [[ -n "$LOCAL_FILE" ]]; then
+						show_argument_error_and_exit "--local is only avaiable when install."
+						fi
+						;;
+					esac
+}
+
+
 ###
 # FILE TEMPLATES
 ###
@@ -715,6 +814,38 @@ download_hysteria() {
 		return 0
 }
 
+check_update() {
+	# RETURN VALUE
+	# 0: update available
+	# 1: installed version is latest
+	
+	echo -ne "Checking for installed version ... "
+	local _installed_version="$(get_installed_version)"
+	if [[ -n "$_installed_version" ]]; then
+		echo "$_installed_version"
+		else
+			echo "not installed"
+			fi
+			
+			echo -ne "Checking for latest version ... "
+			local _latest_version="$(get_latest_version)"
+			if [[ -n "$_latest_version" ]]; then
+				echo "$_latest_version"
+				VERSION="$_latest_version"
+				else
+					echo "failed"
+					return 1
+					fi
+					
+					local _vercmp="$(vercmp "$_installed_version" "$_latest_version")"
+					if [[ "$_vercmp" -lt 0 ]]; then
+						return 0
+						fi
+						
+						return 1
+}
+
+
 ###
 # ENTRY
 ###
@@ -752,6 +883,9 @@ perform_install_hysteria_binary() {
 							rm -f "$_tmpfile"
 }
 
+perform_remove_hysteria_binary() {
+	remove_file "$EXECUTABLE_INSTALL_PATH"
+}
 
 perform_install_hysteria_example_config() {
 	if [[ ! -d "$CONFIG_DIR" ]]; then
@@ -770,6 +904,12 @@ perform_install_hysteria_systemd() {
 		systemctl daemon-reload
 }
 
+perform_remove_hysteria_systemd() {
+	remove_file "$SYSTEMD_SERVICES_DIR/hysteria-server.service"
+	remove_file "$SYSTEMD_SERVICES_DIR/hysteria-server@.service"
+	
+	systemctl daemon-reload
+}
 
 perform_install_hysteria_home_legacy() {
 	if ! is_user_exists "$HYSTERIA_USER"; then
@@ -785,15 +925,14 @@ perform_install() {
 		_is_frash_install=1
 		fi
 		
-	
-perform_install_hysteria_binary
-perform_install_hysteria_example_config
-perform_install_hysteria_home_legacy
-perform_install_hysteria_systemd
-setup_ssl
-start_services
-			if [[ -n "$_is_frash_install" ]]; then
-			echo -e ""
+						perform_install_hysteria_binary
+						perform_install_hysteria_example_config
+						perform_install_hysteria_home_legacy
+						perform_install_hysteria_systemd
+						setup_ssl
+					        start_services
+						if [[ -n "$_is_frash_install" ]]; then
+							echo -e ""
 echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
 echo '                                                              
    ██████╗ ███████╗██╗  ██╗████████╗███████╗██████╗ 
@@ -813,15 +952,53 @@ echo -e " \e[92m Hysteria Domain:\e[0m \e[97m: $DOMAIN\e[0m"
 echo -e " \e[92m Hysteria Obfs:\e[0m \e[97m: $OBFS\e[0m"
 echo -e " \e[92m Hysteria Password:\e[0m \e[97m: $PASSWORD\e[0m"
 echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
-
-else
-restart_running_services
-echo
-echo -e "$(tbold) UDP has been successfully update to $VERSION.$(treset)"
-echo
+							else
+								restart_running_services
+								
+								echo
+								echo -e "$(tbold) UDP has been successfully update to $VERSION.$(treset)"
+								echo
 								fi
 }
 
+perform_remove() {
+	perform_remove_hysteria_binary
+	stop_running_services
+	perform_remove_hysteria_systemd
+	
+	echo
+	echo -e "$(tbold)Congratulation! UDP has been successfully removed from your server.$(treset)"
+	echo
+	echo -e "You still need to remove configuration files and ACME certificates manually with the following commands:"
+	echo
+	echo -e "\t$(tred)rm -rf "$CONFIG_DIR"$(treset)"
+	if [[ "x$HYSTERIA_USER" != "xroot" ]]; then
+		echo -e "\t$(tred)userdel -r "$HYSTERIA_USER"$(treset)"
+		fi
+		if [[ "x$FORCE_NO_SYSTEMD" != "x2" ]]; then
+			echo
+			echo -e "You still might need to disable all related systemd services with the following commands:"
+			echo
+			echo -e "\t$(tred)rm -f /etc/systemd/system/multi-user.target.wants/hysteria-server.service$(treset)"
+			echo -e "\t$(tred)rm -f /etc/systemd/system/multi-user.target.wants/hysteria-server@*.service$(treset)"
+			echo -e "\t$(tred)systemctl daemon-reload$(treset)"
+			fi
+			echo
+}
+
+perform_check_update() {
+	if check_update; then
+		echo
+		echo -e "$(tbold)Update available: $VERSION$(treset)"
+		echo
+		echo -e "$(tgreen)You can download and install the latest version by execute this script without any arguments.$(treset)"
+		echo
+		else
+			echo
+			echo "$(tgreen)Installed version is up-to-dated.$(treset)"
+			echo
+			fi
+}
 
 
 setup_ssl() {
@@ -842,8 +1019,8 @@ start_services() {
 	sudo debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v4 boolean true"
         sudo debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v6 boolean true"
 	apt -y install iptables-persistent
-	iptables -t nat -A PREROUTING -i $(ip -4 route ls|grep default|grep -Po '(?<=dev )(\S+)'|head -1) -p udp --dport 10000:50000 -j DNAT --to-destination $UDP_PORT
-	ip6tables -t nat -A PREROUTING -i $(ip -4 route ls|grep default|grep -Po '(?<=dev )(\S+)'|head -1) -p udp --dport 10000:50000 -j DNAT --to-destination $UDP_PORT
+	iptables -t nat -A PREROUTING -i $(ip -4 route ls|grep default|grep -Po '(?<=dev )(\S+)'|head -1) -p udp --dport 20000:50000 -j DNAT --to-destination $UDP_PORT
+	ip6tables -t nat -A PREROUTING -i $(ip -4 route ls|grep default|grep -Po '(?<=dev )(\S+)'|head -1) -p udp --dport 20000:50000 -j DNAT --to-destination $UDP_PORT
 	sysctl net.ipv4.conf.all.rp_filter=0
 	sysctl net.ipv4.conf.$(ip -4 route ls|grep default|grep -Po '(?<=dev )(\S+)'|head -1).rp_filter=0 
 	echo "net.ipv4.ip_forward = 1
@@ -859,6 +1036,7 @@ start_services() {
 
 
 main() {
+	parse_arguments "$@"
 	check_permission
 	check_environment
 	check_hysteria_user "hysteria"
@@ -866,6 +1044,12 @@ main() {
 	case "$OPERATION" in
 	"install")
 	perform_install
+	;;
+	"remove")
+	perform_remove
+	;;
+	"check_update")
+	perform_check_update
 	;;
 	*)
 	error "Unknown operation '$OPERATION'."
