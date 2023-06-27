@@ -316,19 +316,17 @@ wget -N --no-check-certificate -q -O ~/install_server.sh https://raw.githubuserc
 rm -f /etc/hysteria/config.json
 
 echo '{
-  "listen": ":$UDP_PORT",
+  "listen": ":5666",
   "cert": "/etc/hysteria/server.crt",
   "key": "/etc/hysteria/server.key",
-  "up": "100 Mbps",
   "up_mbps": 100,
-  "down": "100 Mbps",
   "down_mbps": 100,
   "disable_udp": false,
-  "obfs": "$OBFS",
-  "auth": {
+  "obfs": "dex",
+    "auth": {
 	"mode": "passwords",
-	"config": ["$PASSWORD"]
-   }
+	"config": ["mtkvpn"]
+  }
 }
 ' >> /etc/hysteria/config.json
 
