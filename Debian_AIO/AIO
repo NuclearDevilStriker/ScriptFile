@@ -794,9 +794,9 @@ echo -e " \033[0;35m════════════════════
 history -c
 cd /root || exit
 rm -f /root/installer.sh
-echo -e "\e[1;32m Installing Done \033[0m"
-echo 'root:DexterPogi' | sudo chpasswd
-echo -e "\e[1;32m Reboot VPS After 5 Seconds!! \033[0m"
-echo -e "\e[1;32m New Vps Password: DexterPogi \033[0m"
+#echo -e "\e[1;32m Installing Done \033[0m"
+#echo 'root:DexterPogi' | sudo chpasswd
+#echo -e "\e[1;32m Reboot VPS After 5 Seconds!! \033[0m"
+#echo -e "\e[1;32m New Vps Password: DexterPogi \033[0m"
 sleep 5
 reboot
