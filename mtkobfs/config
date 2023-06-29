@@ -8,6 +8,6 @@
   "obfs": "dex",
   "auth": {
     "mode": "passwords",
-    "config": ["mtkvpn", "stronghold3"]
+    "config": ["mtkvpn"]
   }
 }
