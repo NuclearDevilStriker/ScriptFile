@@ -56,8 +56,8 @@ IPADDR="$(curl -4skL http://ipinfo.io/ip)"
 
 GLOBAL_API_KEY="1d0e138b7b9c1368f6cc1b5f8fef94e3c25a8"
 CLOUDFLARE_EMAIL="d.eskalarte@gmail.com"
-DOMAIN_NAME_TLD="tezzvip.xyz"
-DOMAIN_ZONE_ID="73c9308bb3a6784c9c9d2fde30b17d12"
+DOMAIN_NAME_TLD="um-connect.xyz"
+DOMAIN_ZONE_ID="e4f2a9cc1acd6e2c5f43920976d74819"
 ### DNS hostname / Payload here
 ## Setting variable
 
