@@ -98,12 +98,6 @@ function ip_address(){
   [ ! -z "${IP}" ] && echo "${IP}" || echo '0.0.0.0'
 }
 
-install_sshplus(){
-#SSH MANAGER PLUS
-wget https://raw.githubusercontent.com/jenbhie/SSH-PLUS-MANAGER/main/Plus; chmod 777 Plus; ./Plus
-}
-
-
 install_slowdns(){
 rm -rf install; wget https://raw.githubusercontent.com/MtkVpnDev/Slowdns/main/install; chmod +x install; ./install
 bash /etc/slowdns/slowdns-ssh
@@ -335,8 +329,6 @@ sed -i "s|SERVERIP|$server_ip|g" /etc/.counter
   }&>/dev/null
 }
 
-
-install_sshplus
 install_slowdns
 install_hysteria
 create_hostname
