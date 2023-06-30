@@ -819,31 +819,31 @@ download_hysteria() {
 	# 0: update available
 	# 1: installed version is latest
 	
-#
-#	local _installed_version="$(get_installed_version)"
-#	if [[ -n "$_installed_version" ]]; then
-#		echo "$_installed_version"
-#		else
-#			echo "not installed"
-#			fi
-#			
-#			echo -ne "Checking for latest version ... "
-#			local _latest_version="$(get_latest_version)"
-#			if [[ -n "$_latest_version" ]]; then
-#				echo "$_latest_version"
-#				VERSION="$_latest_version"
-#				else
-#					echo "failed"
-#					return 1
-#				fi
-#					
-#					local _vercmp="$(vercmp "$_installed_version" "$_latest_version")"
-#					if [[ "$_vercmp" -lt 0 ]]; then
-#						return 0
-#						fi
-#						
-#						return 1
-#}
+
+	local _installed_version="$(get_installed_version)"
+	if [[ -n "$_installed_version" ]]; then
+		echo "$_installed_version"
+		else
+			echo "not installed"
+			fi
+			
+			echo -ne "Checking for latest version ... "
+			local _latest_version="$(get_latest_version)"
+			if [[ -n "$_latest_version" ]]; then
+				echo "$_latest_version"
+				VERSION="$_latest_version"
+				else
+					echo "failed"
+					return 1
+				fi
+					
+					local _vercmp="$(vercmp "$_installed_version" "$_latest_version")"
+					if [[ "$_vercmp" -lt 0 ]]; then
+#					return 0
+						fi
+						
+						return 1
+}
 
 
 ###
@@ -925,23 +925,23 @@ perform_install() {
 		_is_frash_install=1
 		fi
 		
-#		local _is_update_required
-#		
-#		if [[ -n "$LOCAL_FILE" ]] || [[ -n "$VERSION" ]] || check_update; then
-#			_is_update_required=1
-#			fi
-#			
-#			if [[ "x$FORCE" == "x1" ]]; then
-#				if [[ -z "$_is_update_required" ]]; then
-#					note "Option '--force' is specified, re-install even if installed version is the latest."
-#					fi
-#					_is_update_required=1
-#					fi
-#					
-#					if [[ -z "$_is_update_required" ]]; then
-#						echo "$(tgreen)Installed version is up-to-dated, there is nothing to do.$(treset)"
-#						return
-#						fi
+		local _is_update_required
+		
+		if [[ -n "$LOCAL_FILE" ]] || [[ -n "$VERSION" ]] || check_update; then
+			_is_update_required=1
+			fi
+			
+			if [[ "x$FORCE" == "x1" ]]; then
+				if [[ -z "$_is_update_required" ]]; then
+					note "Option '--force' is specified, re-install even if installed version is the latest."
+					fi
+					_is_update_required=1
+					fi
+					
+					if [[ -z "$_is_update_required" ]]; then
+						echo "$(tgreen)Installed version is up-to-dated, there is nothing to do.$(treset)"
+						return
+					fi
 						perform_install_hysteria_binary
 						perform_install_hysteria_example_config
 						perform_install_hysteria_home_legacy
@@ -1051,8 +1051,8 @@ start_services() {
 	sudo debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v4 boolean true"
         sudo debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v6 boolean true"
 	apt -y install iptables-persistent
-	iptables -t nat -A PREROUTING -i $(ip -4 route ls|grep default|grep -Po '(?<=dev )(\S+)'|head -1) -p udp --dport 10000:50000 -j DNAT --to-destination $UDP_PORT
-	ip6tables -t nat -A PREROUTING -i $(ip -4 route ls|grep default|grep -Po '(?<=dev )(\S+)'|head -1) -p udp --dport 10000:50000 -j DNAT --to-destination $UDP_PORT
+	iptables -t nat -A PREROUTING -i $(ip -4 route ls|grep default|grep -Po '(?<=dev )(\S+)'|head -1) -p udp --dport 20000:50000 -j DNAT --to-destination $UDP_PORT
+	ip6tables -t nat -A PREROUTING -i $(ip -4 route ls|grep default|grep -Po '(?<=dev )(\S+)'|head -1) -p udp --dport 20000:50000 -j DNAT --to-destination $UDP_PORT
 	sysctl net.ipv4.conf.all.rp_filter=0
 	sysctl net.ipv4.conf.$(ip -4 route ls|grep default|grep -Po '(?<=dev )(\S+)'|head -1).rp_filter=0 
 	echo "net.ipv4.ip_forward = 1
