@@ -947,19 +947,26 @@ perform_install() {
 	setup_ssl
 	start_services
 	if [[ -n "$_is_frash_install" ]]; then
-		D=$(cat $CONFIG_DIR/config.json|grep 'listen\|obfs'|sed 's/"\|,//g'|sed 's/: :/: /'|sed 's/listen/PUERTO/'|sed 's/obfs/OBFS/')
-		echo
-		echo -e "$(tbold)Congratulation! Rufu99-UDP has been successfully installed on your server.$(treset)"
-		echo
-		echo -e "$(tbold)Client app AGN INJECTOR:$(treset)"
-		echo -e "$(tblue)https://play.google.com/store/apps/details?id=com.agn.injector$(treset)"
-		echo
-		echo "$D"
-		echo
-		echo "crear usuario manualmente"
-		echo
-		echo "useradd -M -s /bin/false NOMBRE; (echo 'CONTRA'; echo 'CONTRA')|passwd NOMBRE"
-		echo
+		D=$(cat $CONFIG_DIR/config.json|grep 'listen\|obfs'|sed 's/"\|,//g'|sed 's/: :/: /'|sed 's/listen/PUERTO/'|sed 's/obfs/OBFS/')echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
+echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
+echo '                                                              
+   ██████╗ ███████╗██╗  ██╗████████╗███████╗██████╗ 
+   ██╔══██╗██╔════╝╚██╗██╔╝╚══██╔══╝██╔════╝██╔══██╗
+   ██║  ██║█████╗   ╚███╔╝    ██║   █████╗  ██████╔╝
+   ██║  ██║██╔══╝   ██╔██╗    ██║   ██╔══╝  ██╔══██╗
+   ██████╔╝███████╗██╔╝ ██╗   ██║   ███████╗██║  ██║
+   ╚═════╝ ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝  
+ '
+echo -e "$(tbold)Congratulation! UDP has been successfully installed on your server.$(treset)"
+echo -e""
+echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
+echo -e " \033[0;33m Hysteria Configuration: \033[0m"
+echo -e ""
+echo -e " \e[92m Hysteria Port:\e[0m \e[97m: $UDP_PORT\e[0m"
+echo -e " \e[92m Hysteria Domain:\e[0m \e[97m: $DOMAIN\e[0m"
+echo -e " \e[92m Hysteria Obfs:\e[0m \e[97m: $OBFS\e[0m"
+echo -e " \e[92m Hysteria Password:\e[0m \e[97m: $PASSWORD\e[0m"
+echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
 	else
 		restart_running_services
 		
