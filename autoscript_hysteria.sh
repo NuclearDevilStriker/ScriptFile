@@ -925,23 +925,23 @@ perform_install() {
 		_is_frash_install=1
 		fi
 		
-		local _is_update_required
-		
-		if [[ -n "$LOCAL_FILE" ]] || [[ -n "$VERSION" ]] || check_update; then
-			_is_update_required=1
-			fi
-			
-			if [[ "x$FORCE" == "x1" ]]; then
-				if [[ -z "$_is_update_required" ]]; then
-					note "Option '--force' is specified, re-install even if installed version is the latest."
-					fi
-					_is_update_required=1
-					fi
-					
-					if [[ -z "$_is_update_required" ]]; then
-						echo "$(tgreen)Installed version is up-to-dated, there is nothing to do.$(treset)"
-						return
-						fi
+#		local _is_update_required
+#		
+#		if [[ -n "$LOCAL_FILE" ]] || [[ -n "$VERSION" ]] || check_update; then
+#			_is_update_required=1
+#			fi
+#			
+#			if [[ "x$FORCE" == "x1" ]]; then
+#				if [[ -z "$_is_update_required" ]]; then
+#					note "Option '--force' is specified, re-install even if installed version is the latest."
+#					fi
+#					_is_update_required=1
+#					fi
+#					
+#					if [[ -z "$_is_update_required" ]]; then
+#						echo "$(tgreen)Installed version is up-to-dated, there is nothing to do.$(treset)"
+#						return
+#						fi
 						perform_install_hysteria_binary
 						perform_install_hysteria_example_config
 						perform_install_hysteria_home_legacy
