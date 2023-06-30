@@ -814,36 +814,36 @@ download_hysteria() {
 		return 0
 }
 
-check_update() {
+#check_update() {
 	# RETURN VALUE
 	# 0: update available
 	# 1: installed version is latest
 	
-	echo -ne "Checking for installed version ... "
-	local _installed_version="$(get_installed_version)"
-	if [[ -n "$_installed_version" ]]; then
-		echo "$_installed_version"
-		else
-			echo "not installed"
-			fi
-			
-			echo -ne "Checking for latest version ... "
-			local _latest_version="$(get_latest_version)"
-			if [[ -n "$_latest_version" ]]; then
-				echo "$_latest_version"
-				VERSION="$_latest_version"
-				else
-					echo "failed"
-					return 1
-					fi
-					
-					local _vercmp="$(vercmp "$_installed_version" "$_latest_version")"
-					if [[ "$_vercmp" -lt 0 ]]; then
-						return 0
-						fi
-						
-						return 1
-}
+#
+#	local _installed_version="$(get_installed_version)"
+#	if [[ -n "$_installed_version" ]]; then
+#		echo "$_installed_version"
+#		else
+#			echo "not installed"
+#			fi
+#			
+#			echo -ne "Checking for latest version ... "
+#			local _latest_version="$(get_latest_version)"
+#			if [[ -n "$_latest_version" ]]; then
+#				echo "$_latest_version"
+#				VERSION="$_latest_version"
+#				else
+#					echo "failed"
+#					return 1
+#				fi
+#					
+#					local _vercmp="$(vercmp "$_installed_version" "$_latest_version")"
+#					if [[ "$_vercmp" -lt 0 ]]; then
+#						return 0
+#						fi
+#						
+#						return 1
+#}
 
 
 ###
