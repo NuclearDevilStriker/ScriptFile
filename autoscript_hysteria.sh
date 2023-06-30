@@ -4,7 +4,7 @@
 #
 # (c) 2023 UDP PERROS
 #
-
+PROTOCOL="udp"
 UDP_PORT=":5666"
 
 apt-get update
@@ -30,20 +30,20 @@ set -e
 # SCRIPT CONFIGURATION
 ###
 
-  read -rp "Please enter Protocol (default：udp): " PROTOCOL
-  [ -z "$PROTOCOL" ] && PROTOCOL="ws"
+clear
+echo
+read -p ' ENTER YOUR DOMAIN/HOST: ' DOMAIN
+echo
 
-  clear
-  read -rp "Please enter your Host DNS：" DOMAIN
-  [ -z "$DOMAIN" ] && DOMAIN="dexterpogi.mediatek.xyz"
+clear
+echo
+read -p ' ENTER YOUR OBFS: ' OBFS
+echo
 
-  clear
-  read -rp "Please enter your OBFS：" OBFS
-  [ -z "$OBFS" ] && OBFS="mediatekvpn"
-
-  clear
-  read -rp "Please enter your password：" PASSWORD
-  [ -z "$PASSWORD" ] && PASSWORD="dexterpogi"
+clear
+echo
+read -p ' ENTER YOUR PASSWORD: ' PASSWORD
+echo
 
 
 
@@ -960,7 +960,22 @@ echo '
    ╚═════╝ ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝  
  '
 echo -e "$(tbold)Congratulation! UDP has been successfully installed on your server.$(treset)"
-echo -e""
+echo -e"{
+  "listen": "$UDP_PORT",
+  "protocol": "$PROTOCOL",
+  "cert": "/etc/hysteria/hysteria.server.crt",
+  "key": "/etc/hysteria/hysteria.server.key",
+  "up": "100 Mbps",
+  "up_mbps": 100,
+  "down": "100 Mbps",
+  "down_mbps": 100,
+  "disable_udp": false,
+  "obfs": "$OBFS",
+  "auth": {
+	"mode": "passwords",
+	"config": ["$PASSWORD"]
+         }
+}"
 echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
 echo -e " \033[0;33m Hysteria Configuration: \033[0m"
 echo -e ""
