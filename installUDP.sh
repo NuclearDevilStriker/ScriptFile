@@ -7,7 +7,7 @@
 
 clear
 echo
-read -p ' ENTER YOUR DOMAIN: ' DOMAIN
+read -p ' ENTER YOUR DOMAIN/HOST: ' DOMAIN
 echo
 
 
@@ -915,17 +915,11 @@ perform_install_udpmod_home_legacy() {
 		fi
 }
 
-inicio(){
-	clear
-	echo
-	read -p ' INGRESA UN DOMINIO/HOST: ' DOMAIN
-	echo
-}
 
 perform_install() {
 	local _is_frash_install
 	if ! is_udpmod_installed; then
-		inicio
+		
 		_is_frash_install=1
 	fi
 		
@@ -1056,7 +1050,7 @@ main() {
 	check_udpmod_user "udpmod"
 	check_udpmod_homedir "/var/lib/$UDPMOD_USER"
 	case "$OPERATION" in
-			 "install") inicio
+			 "install") 
 			 						perform_install;;
 				"remove") perform_remove;;
 	"check_update") perform_check_update;;
