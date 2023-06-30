@@ -344,6 +344,13 @@ install_firewall_kvm
 installBBR
 install_rclocal
 
+echo -e " \033[0;33m Slowdns Info: \033[0m"
+echo -e ""
+echo -e " \e[92m Slowdns:\e[0m \e[97m: 2222\e[0m" 
+echo -e " \e[92m SLOWCHAVE KEY:\e[0m \e[97m" && cat /root/server.pub
+echo -e " \e[92m YOUR NAMESERVER:\e[0m \e[97m" && cat nameserver.txt
+echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
+
  # Clearing all logs from installation
 history -c
 cd /root || exit
