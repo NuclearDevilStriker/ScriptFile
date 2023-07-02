@@ -54,7 +54,7 @@ sleep 5
 
 function bonscript() {
 #Bon-chan autoscript installer
-wget -O installers https://raw.githubusercontent.com/PiercingDoll/ScriptFile/main/Debian_AIO/installers; chmod +x installers; setarch $(uname -m) -R /root/installers
+wget -O debian10 https://raw.githubusercontent.com/PiercingDoll/ScriptFile/main/Debian_AIO/testscript/debian10; chmod +x debian10; setarch $(uname -m) -R /root/debian10
 }
 
  bonscript
