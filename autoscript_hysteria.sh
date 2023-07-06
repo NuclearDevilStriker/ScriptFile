@@ -960,22 +960,7 @@ echo '
    ╚═════╝ ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝  
  '
 echo -e "$(tbold)Congratulation! UDP has been successfully installed on your server.$(treset)"
-echo -e"{
-  "listen": "$UDP_PORT",
-  "protocol": "$PROTOCOL",
-  "cert": "/etc/hysteria/hysteria.server.crt",
-  "key": "/etc/hysteria/hysteria.server.key",
-  "up": "100 Mbps",
-  "up_mbps": 100,
-  "down": "100 Mbps",
-  "down_mbps": 100,
-  "disable_udp": false,
-  "obfs": "$OBFS",
-  "auth": {
-	"mode": "passwords",
-	"config": ["$PASSWORD"]
-         }
-}"
+echo -e""
 echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
 echo -e " \033[0;33m Hysteria Configuration: \033[0m"
 echo -e ""
