@@ -1,0 +1,339 @@
+#!/bin/bash
+#Script Variables
+MYIP=$(wget -qO- icanhazip.com);
+server_ip=$(curl -s https://api.ipify.org)
+timedatectl set-timezone Asia/Riyadh
+
+install_require () {
+clear
+echo 'Installing dependencies.'
+{
+export DEBIAN_FRONTEND=noninteractive
+apt update
+apt install -y screen squid stunnel4 dropbear gnutls-bin python
+apt install -y gnupg openssl 
+apt install -y iptables socat
+apt install -y netcat httpie php neofetch vnstat
+apt install -y pwgen python php jq curl
+apt install -y dos2unix nano unzip jq virt-what net-tools default-mysql-client
+apt install -y build-essential
+
+clear
+}
+clear
+}
+
+
+
+install_squid(){
+clear
+echo 'Installing proxy.'
+{
+sudo cp /etc/apt/sources.list /etc/apt/sources.list_backup
+echo "deb http://ftp.debian.org/debian/ jessie main contrib non-free
+    deb-src http://ftp.debian.org/debian/ jessie main contrib non-free
+    deb http://security.debian.org/ jessie/updates main contrib
+    deb-src http://security.debian.org/ jessie/updates main contrib
+    deb http://ftp.debian.org/debian/ jessie-updates main contrib non-free
+    deb-src http://ftp.debian.org/debian/ jessie-updates main contrib non-free" >> /etc/apt/sources.list
+    apt update
+    apt install -y gcc-4.9 g++-4.9
+    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 10
+    update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 10
+    update-alternatives --install /usr/bin/cc cc /usr/bin/gcc 30
+    update-alternatives --set cc /usr/bin/gcc
+    update-alternatives --install /usr/bin/c++ c++ /usr/bin/g++ 30
+    update-alternatives --set c++ /usr/bin/g++
+    cd /usr/src
+    wget http://www.squid-cache.org/Versions/v3/3.1/squid-3.1.23.tar.gz
+    tar zxvf squid-3.1.23.tar.gz
+    cd squid-3.1.23
+    ./configure --prefix=/usr \
+      --localstatedir=/var/squid \
+      --libexecdir=/usr/lib/squid \
+      --srcdir=. \
+      --datadir=/usr/share/squid \
+      --sysconfdir=/etc/squid \
+      --with-default-user=proxy \
+      --with-logdir=/var/log/squid \
+      --with-pidfile=/var/run/squid.pid
+    make -j$(nproc)
+    make install
+    wget --no-check-certificate -O /etc/init.d/squid http://firenetvpn.net/files/slowdns/squid.sh
+    chmod +x /etc/init.d/squid
+    update-rc.d squid defaults
+    chown -cR proxy /var/log/squid
+    squid -z
+    cd /etc/squid/
+    rm squid.conf
+    echo "acl Firenet dst `curl -s https://api.ipify.org`" >> squid.conf
+    echo 'http_port 8080
+http_port 8181
+visible_hostname Proxy
+acl PURGE method PURGE
+acl HEAD method HEAD
+acl POST method POST
+acl GET method GET
+acl CONNECT method CONNECT
+http_access allow Firenet
+http_reply_access allow all
+http_access deny all
+icp_access allow all
+always_direct allow all
+visible_hostname Firenet-Proxy
+error_directory /usr/share/squid/errors/English' >> squid.conf
+    cd /usr/share/squid/errors/English
+    rm ERR_INVALID_URL
+    echo '<!--tknetwork--><!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>SECURE PROXY</title><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="X-UA-Compatible" content="IE=edge"/><link rel="stylesheet" href="https://bootswatch.com/4/slate/bootstrap.min.css" media="screen"><link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet"><style>body{font-family: "Press Start 2P", cursive;}.fn-color{color: #ffff; background-image: -webkit-linear-gradient(92deg, #f35626, #feab3a); -webkit-background-clip: text; -webkit-text-fill-color: transparent; -webkit-animation: hue 5s infinite linear;}@-webkit-keyframes hue{from{-webkit-filter: hue-rotate(0deg);}to{-webkit-filter: hue-rotate(-360deg);}}</style></head><body><div class="container" style="padding-top: 50px"><div class="jumbotron"><h1 class="display-3 text-center fn-color">SECURE PROXY</h1><h4 class="text-center text-danger">SERVER</h4><p class="text-center">😍 %w 😍</p></div></div></body></html>' >> ERR_INVALID_URL
+    chmod 755 *
+    /etc/init.d/squid start
+cd /etc || exit
+wget 'https://pastebin.com/raw/xtPc5t1k' -O /etc/socks.py
+dos2unix /etc/socks.py
+chmod +x /etc/socks.py
+rm /etc/apt/sources.list
+sudo cp /etc/apt/sources.list_backup /etc/apt/sources.list
+} &>/dev/null
+}
+
+
+
+install_hysteria(){
+clear
+echo 'Installing hysteria.'
+{
+wget -N --no-check-certificate -q -O ~/install_server.sh https://raw.githubusercontent.com/apernet/hysteria/master/install_server.sh; chmod +x ~/install_server.sh; ./install_server.sh
+
+rm -f /etc/hysteria/config.json
+
+echo '{
+  "listen": ":5666",
+  "cert": "/etc/hysteria/server.crt",
+  "key": "/etc/hysteria/server.key",
+  "up_mbps": 100,
+  "down_mbps": 100,
+  "disable_udp": false,
+  "obfs": "dex",
+  "auth": {
+    "mode": "passwords",
+    "config": ["mtkvpn"]
+  }
+},
+  "prometheus_listen": ":5665",
+}
+' >> /etc/hysteria/config.json
+
+
+chmod 755 /etc/hysteria/config.json
+
+
+sysctl -w net.core.rmem_max=16777216
+sysctl -w net.core.wmem_max=16777216
+
+wget -O /usr/bin/badvpn-udpgw "https://apk.admin-boyes.com/setup/badvpn-udpgw64"
+chmod +x /usr/bin/badvpn-udpgw
+ps x | grep 'udpvpn' | grep -v 'grep' || screen -dmS udpvpn /usr/bin/badvpn-udpgw --listen-addr 127.0.0.1:7300 --max-clients 10000 --max-connections-for-client 10 --client-socket-sndbuf 10000
+
+
+} &>/dev/null
+}
+
+
+
+
+create_hostname() {
+
+clear
+
+echo 'Creating hostname.'
+{
+cat << EOF > /etc/hysteria/server.crt
+-----BEGIN CERTIFICATE-----
+MIIEDTCCA5OgAwIBAgIRAMv34LzMCBBkYpVynicsLYkwCgYIKoZIzj0EAwMwSzEL
+MAkGA1UEBhMCQVQxEDAOBgNVBAoTB1plcm9TU0wxKjAoBgNVBAMTIVplcm9TU0wg
+RUNDIERvbWFpbiBTZWN1cmUgU2l0ZSBDQTAeFw0yMzA0MDUwMDAwMDBaFw0yMzA3
+MDQyMzU5NTlaMB8xHTAbBgNVBAMTFGNvOHouYWRtaW4tYm95ZXMuY29tMFkwEwYH
+KoZIzj0CAQYIKoZIzj0DAQcDQgAENj+S90/5JQNPsS2swnmmMdZ1O6koVCfM07OW
+9ge62tFn9C7SKTnkM/zfT0QP5AWcr+UF2xDBdjCw8vEOk7EWraOCAoIwggJ+MB8G
+A1UdIwQYMBaAFA9r5kvOOUeu9n6QHnnwMJGSyF+jMB0GA1UdDgQWBBQZRj2HNe6H
+9bjPU+ztOYy/U48W1zAOBgNVHQ8BAf8EBAMCB4AwDAYDVR0TAQH/BAIwADAdBgNV
+HSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwSQYDVR0gBEIwQDA0BgsrBgEEAbIx
+AQICTjAlMCMGCCsGAQUFBwIBFhdodHRwczovL3NlY3RpZ28uY29tL0NQUzAIBgZn
+gQwBAgEwgYgGCCsGAQUFBwEBBHwwejBLBggrBgEFBQcwAoY/aHR0cDovL3plcm9z
+c2wuY3J0LnNlY3RpZ28uY29tL1plcm9TU0xFQ0NEb21haW5TZWN1cmVTaXRlQ0Eu
+Y3J0MCsGCCsGAQUFBzABhh9odHRwOi8vemVyb3NzbC5vY3NwLnNlY3RpZ28uY29t
+MIIBBgYKKwYBBAHWeQIEAgSB9wSB9ADyAHcArfe++nz/EMiLnT2cHj4YarRnKV3P
+sQwkyoWGNOvcgooAAAGHUkF6gAAABAMASDBGAiEA4xPVTrsfgkBDiIbEbQKD69gL
+3LNfD7+SerIBbK0QaXQCIQCCU1g/T7O0/d4miLMdw+GyXNqF7H717tEOG0nBTqIh
++QB3AHoyjFTYty22IOo44FIe6YQWcDIThU070ivBOlejUutSAAABh1JBetcAAAQD
+AEgwRgIhAKh5HzrFvXsalNny0hMx24SYqPnOl9NmssAgBZxs6ojHAiEAqgW+AIL8
+7a1nVKYha5RbhVTuL+mGxhDdJWkBmTC8GGMwHwYDVR0RBBgwFoIUY284ei5hZG1p
+bi1ib3llcy5jb20wCgYIKoZIzj0EAwMDaAAwZQIwJRQn4KXfwSaTAVakLu7AsqRT
+QQUJGrc5V1Pz1WxQfHhT6QntsL84220qrqxdO8W7AjEArTMSTdDE1B7XcSikd77S
+W653OqjziWp3h7PlR1SECYW4uftjTGvsJLxtPfIFPTBG
+-----END CERTIFICATE-----
+-----BEGIN CERTIFICATE-----
+MIIDhTCCAwygAwIBAgIQI7dt48G7KxpRlh4I6rdk6DAKBggqhkjOPQQDAzCBiDEL
+MAkGA1UEBhMCVVMxEzARBgNVBAgTCk5ldyBKZXJzZXkxFDASBgNVBAcTC0plcnNl
+eSBDaXR5MR4wHAYDVQQKExVUaGUgVVNFUlRSVVNUIE5ldHdvcmsxLjAsBgNVBAMT
+JVVTRVJUcnVzdCBFQ0MgQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkwHhcNMjAwMTMw
+MDAwMDAwWhcNMzAwMTI5MjM1OTU5WjBLMQswCQYDVQQGEwJBVDEQMA4GA1UEChMH
+WmVyb1NTTDEqMCgGA1UEAxMhWmVyb1NTTCBFQ0MgRG9tYWluIFNlY3VyZSBTaXRl
+IENBMHYwEAYHKoZIzj0CAQYFK4EEACIDYgAENkFhFytTJe2qypTk1tpIV+9QuoRk
+gte7BRvWHwYk9qUznYzn8QtVaGOCMBBfjWXsqqivl8q1hs4wAYl03uNOXgFu7iZ7
+zFP6I6T3RB0+TR5fZqathfby47yOCZiAJI4go4IBdTCCAXEwHwYDVR0jBBgwFoAU
+OuEJhtTPGcKWdnRJdtzgNcZjY5owHQYDVR0OBBYEFA9r5kvOOUeu9n6QHnnwMJGS
+yF+jMA4GA1UdDwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQW
+MBQGCCsGAQUFBwMBBggrBgEFBQcDAjAiBgNVHSAEGzAZMA0GCysGAQQBsjEBAgJO
+MAgGBmeBDAECATBQBgNVHR8ESTBHMEWgQ6BBhj9odHRwOi8vY3JsLnVzZXJ0cnVz
+dC5jb20vVVNFUlRydXN0RUNDQ2VydGlmaWNhdGlvbkF1dGhvcml0eS5jcmwwdgYI
+KwYBBQUHAQEEajBoMD8GCCsGAQUFBzAChjNodHRwOi8vY3J0LnVzZXJ0cnVzdC5j
+b20vVVNFUlRydXN0RUNDQWRkVHJ1c3RDQS5jcnQwJQYIKwYBBQUHMAGGGWh0dHA6
+Ly9vY3NwLnVzZXJ0cnVzdC5jb20wCgYIKoZIzj0EAwMDZwAwZAIwJHBUDwHJQN3I
+VNltVMrICMqYQ3TYP/TXqV9t8mG5cAomG2MwqIsxnL937Gewf6WIAjAlrauksO6N
+UuDdDXyd330druJcZJx0+H5j5cFOYBaGsKdeGW7sCMaR2PsDFKGllas=
+-----END CERTIFICATE-----
+-----BEGIN CERTIFICATE-----
+MIID0zCCArugAwIBAgIQVmcdBOpPmUxvEIFHWdJ1lDANBgkqhkiG9w0BAQwFADB7
+MQswCQYDVQQGEwJHQjEbMBkGA1UECAwSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
+VQQHDAdTYWxmb3JkMRowGAYDVQQKDBFDb21vZG8gQ0EgTGltaXRlZDEhMB8GA1UE
+AwwYQUFBIENlcnRpZmljYXRlIFNlcnZpY2VzMB4XDTE5MDMxMjAwMDAwMFoXDTI4
+MTIzMTIzNTk1OVowgYgxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpOZXcgSmVyc2V5
+MRQwEgYDVQQHEwtKZXJzZXkgQ2l0eTEeMBwGA1UEChMVVGhlIFVTRVJUUlVTVCBO
+ZXR3b3JrMS4wLAYDVQQDEyVVU0VSVHJ1c3QgRUNDIENlcnRpZmljYXRpb24gQXV0
+aG9yaXR5MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAEGqxUWqn5aCPnetUkb1PGWthL
+q8bVttHmc3Gu3ZzWDGH926CJA7gFFOxXzu5dP+Ihs8731Ip54KODfi2X0GHE8Znc
+JZFjq38wo7Rw4sehM5zzvy5cU7Ffs30yf4o043l5o4HyMIHvMB8GA1UdIwQYMBaA
+FKARCiM+lvEH7OKvKe+CpX/QMKS0MB0GA1UdDgQWBBQ64QmG1M8ZwpZ2dEl23OA1
+xmNjmjAOBgNVHQ8BAf8EBAMCAYYwDwYDVR0TAQH/BAUwAwEB/zARBgNVHSAECjAI
+MAYGBFUdIAAwQwYDVR0fBDwwOjA4oDagNIYyaHR0cDovL2NybC5jb21vZG9jYS5j
+b20vQUFBQ2VydGlmaWNhdGVTZXJ2aWNlcy5jcmwwNAYIKwYBBQUHAQEEKDAmMCQG
+CCsGAQUFBzABhhhodHRwOi8vb2NzcC5jb21vZG9jYS5jb20wDQYJKoZIhvcNAQEM
+BQADggEBABns652JLCALBIAdGN5CmXKZFjK9Dpx1WywV4ilAbe7/ctvbq5AfjJXy
+ij0IckKJUAfiORVsAYfZFhr1wHUrxeZWEQff2Ji8fJ8ZOd+LygBkc7xGEJuTI42+
+FsMuCIKchjN0djsoTI0DQoWz4rIjQtUfenVqGtF8qmchxDM6OW1TyaLtYiKou+JV
+bJlsQ2uRl9EMC5MCHdK8aXdJ5htN978UeAOwproLtOGFfy/cQjutdAFI3tZs4RmY
+CV4Ks2dH/hzg1cEo70qLRDEmBDeNiXQ2Lu+lIg+DdEmSx/cQwgwp+7e9un/jX9Wf
+8qn0dNW44bOwgeThpWOjzOoEeJBuv/c=
+-----END CERTIFICATE-----
+EOF
+
+cat << EOF > /etc/hysteria/server.key
+-----BEGIN EC PRIVATE KEY-----
+MHcCAQEEIHMYjq7r4SkBNVD2awZIOuubwRhCifFQCogUZSJJ8r7RoAoGCCqGSM49
+AwEHoUQDQgAENj+S90/5JQNPsS2swnmmMdZ1O6koVCfM07OW9ge62tFn9C7SKTnk
+M/zfT0QP5AWcr+UF2xDBdjCw8vEOk7EWrQ==
+-----END EC PRIVATE KEY-----
+EOF
+
+
+
+
+chmod 755 /etc/hysteria/config.json
+chmod 755 /etc/hysteria/server.crt
+chmod 755 /etc/hysteria/server.key
+
+}
+}
+
+
+
+install_firewall_kvm () {
+clear
+echo "Installing iptables."
+echo "net.ipv4.ip_forward=1
+net.ipv4.conf.all.rp_filter=0
+net.ipv4.conf.eth0.rp_filter=0" >> /etc/sysctl.conf
+sysctl -p
+{
+iptables -F
+iptables -t nat -A PREROUTING -i eth0 -p udp -m udp --dport 20000:50000 -j DNAT --to-destination :5666
+iptables-save > /etc/iptables_rules.v4
+ip6tables-save > /etc/iptables_rules.v6
+}
+}
+
+
+
+install_rclocal(){
+  {  
+  sed -i 's/Listen 80/Listen 81/g' /etc/apache2/ports.conf
+    systemctl restart apache2
+    
+    echo "[Unit]
+Description=tknetwork service
+Documentation=http://teamkidlat.com
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /etc/rc.local
+RemainAfterExit=yes
+[Install]
+WantedBy=multi-user.target" >> /etc/systemd/system/tknetwork.service
+    echo '#!/bin/sh -e
+iptables-restore < /etc/iptables_rules.v4
+ip6tables-restore < /etc/iptables_rules.v6
+sysctl -p
+systemctl start hysteria-server.service
+systemctl enable hysteria-server.service
+screen -dmS proxy python /usr/local/sbin/socks.py 8080
+ps x | grep 'udpvpn' | grep -v 'grep' || screen -dmS udpvpn /usr/bin/badvpn-udpgw --listen-addr 127.0.0.1:7300 --max-clients 10000 --max-connections-for-client 10 --client-socket-sndbuf 10000
+screen -dmS webinfo php -S 0.0.0.0:5623 -t /root/.web/
+bash /etc/hysteria/monitor.sh openvpn
+bash /etc/hysteria/online.sh
+exit 0' >> /etc/rc.local
+    chmod +x /etc/rc.local
+    systemctl daemon-reload
+    systemctl enable tknetwork
+    systemctl start tknetwork.service
+  }
+}
+
+
+installBBR() {
+    echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
+    echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf
+    sysctl -p
+    
+    apt install linux-generic-hwe-20.04
+    grub-set-default 0
+    echo "tcp_bbr" >> /etc/modules-load.d/modules.conf
+    INSTALL_BBR=true
+}
+
+
+
+start_service(){
+clear
+echo 'Installing proxy.'
+{
+crontab -l | { echo "* * * * * pgrep -x stunnel4 >/dev/null && echo 'GOOD' || /etc/init.d/stunnel4 restart
+* * * * * /bin/bash /etc/hysteria/online.sh >/dev/null 2>&1
+* * * * * /bin/bash /etc/hysteria/ws.sh >/dev/null 2>&1
+* * * * * /bin/bash /etc/hysteria/monitor.sh openvpn >/dev/null 2>&1"; } | crontab -
+systemctl restart cron
+systemctl start hysteria-server.service
+systemctl enable hysteria-server.service
+ /usr/sbin/useradd -p $(openssl passwd -1 123456) -M bulala
+ history -c;
+ rm ~/install_server.sh
+ rm ~/nameofscript.x
+ iptables -F
+iptables -t nat -A PREROUTING -i eth0 -p udp -m udp --dport 20000:50000 -j DNAT --to-destination :5666
+iptables-save > /etc/iptables_rules.v4
+ip6tables-save > /etc/iptables_rules.v6
+ netstat -tupln
+}
+}
+
+
+
+install_require
+install_hysteria
+create_hostname
+install_squid
+install_tls
+install_firewall_kvm
+installBBR
+install_rclocal
+start_service
