@@ -37,26 +37,14 @@ apt-get install inxi screenfetch lolcat figlet -y
 
 exec 2>&1
 
-#[ -r /etc/lsb-release ] && . /etc/lsb-release
-
-#if [ -z "$DISTRIB_DESCRIPTION" ] && [ -x /usr/bin/lsb_release ]; then
-   # Fall back to using the very slow lsb_release utility
-  # DISTRIB_DESCRIPTION=$(lsb_release -s -d)
-#fi
-
 # lolcat MIGHT NOT BE IN $PATH YET, SO BE EXPLICIT
 LOLCAT=/usr/games/lolcat
 
 # UPPERCASE HOSTNAME, APPLY FIGLET FONT "block" AND CENTERING
 INFO_HOST=$(echo DEXTER | awk '{print toupper($0)}' | figlet -tc -f block)
 
-# GET OS/ARCH/DATE, APPLY FIGLET FONT "term" AND CENTERING
-# INFO_OS=$(printf "%s (%s)\n%s" "$DISTRIB_DESCRIPTION" "$(uname -r)" "$(date)" | figlet -tc -f term)
-
 # RUN IT ALL THROUGH lolcat FOR COLORING
-# NOTE: needs -f to force color output since intermediate file is not a TTY
 printf "%s\n%s\n" "$INFO_HOST" | $LOLCAT -f
-#/usr/bin/screenfetch
 EOM
 
 chmod -x /etc/update-motd.d/*
@@ -573,7 +561,7 @@ def main(host=IP, port=PORT):
     print "\033[0;34mâ”"*8,"\033[1;32m PROXY SOCKS","\033[0;34mâ”"*8,"\n"
     print "\033[1;33mIP:\033[1;32m " + IP
     print "\033[1;33mPORTA:\033[1;32m " + str(PORT) + "\n"
-    print "\033[0;34mâ”"*10,"\033[1;32m StrongHold","\033[0;34mâ”\033[1;37m"*11,"\n"
+    print "\033[0;34mâ”"*10,"\033[1;32m Dexter Eskalarte","\033[0;34mâ”\033[1;37m"*11,"\n"
     server = Server(IP, PORT)
     server.start()
     while True:
