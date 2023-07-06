@@ -814,12 +814,12 @@ download_hysteria() {
 		return 0
 }
 
-#check_update() {
+check_update() {
 	# RETURN VALUE
 	# 0: update available
 	# 1: installed version is latest
 	
-
+	echo -ne "Checking for installed version ... "
 	local _installed_version="$(get_installed_version)"
 	if [[ -n "$_installed_version" ]]; then
 		echo "$_installed_version"
@@ -835,11 +835,11 @@ download_hysteria() {
 				else
 					echo "failed"
 					return 1
-				fi
+					fi
 					
 					local _vercmp="$(vercmp "$_installed_version" "$_latest_version")"
 					if [[ "$_vercmp" -lt 0 ]]; then
-#					return 0
+						return 0
 						fi
 						
 						return 1
@@ -941,7 +941,7 @@ perform_install() {
 					if [[ -z "$_is_update_required" ]]; then
 						echo "$(tgreen)Installed version is up-to-dated, there is nothing to do.$(treset)"
 						return
-					fi
+						fi
 						perform_install_hysteria_binary
 						perform_install_hysteria_example_config
 						perform_install_hysteria_home_legacy
@@ -964,10 +964,10 @@ echo -e""
 echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
 echo -e " \033[0;33m Hysteria Configuration: \033[0m"
 echo -e ""
-echo -e " \e[92m Hysteria Port:\e[0m \e[97m: $UDP_PORT\e[0m"
-echo -e " \e[92m Hysteria Domain:\e[0m \e[97m: $DOMAIN\e[0m"
-echo -e " \e[92m Hysteria Obfs:\e[0m \e[97m: $OBFS\e[0m"
-echo -e " \e[92m Hysteria Password:\e[0m \e[97m: $PASSWORD\e[0m"
+echo -e " \e[92m Hysteria Port:\e[0m \e[97m: $DOMAIN\e[0m"
+echo -e " \e[92m Hysteria Port:\e[0m \e[97m: 5666\e[0m"
+echo -e " \e[92m Obfs:\e[0m \e[97m: $OBFS\e[0m"
+echo -e " \e[92m Password:\e[0m \e[97m: $PASSWORD\e[0m"
 echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
 							else
 								restart_running_services
@@ -1036,8 +1036,8 @@ start_services() {
 	sudo debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v4 boolean true"
         sudo debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v6 boolean true"
 	apt -y install iptables-persistent
-	iptables -t nat -A PREROUTING -i $(ip -4 route ls|grep default|grep -Po '(?<=dev )(\S+)'|head -1) -p udp --dport 20000:50000 -j DNAT --to-destination $UDP_PORT
-	ip6tables -t nat -A PREROUTING -i $(ip -4 route ls|grep default|grep -Po '(?<=dev )(\S+)'|head -1) -p udp --dport 20000:50000 -j DNAT --to-destination $UDP_PORT
+	iptables -t nat -A PREROUTING -i $(ip -4 route ls|grep default|grep -Po '(?<=dev )(\S+)'|head -1) -p udp --dport 10000:50000 -j DNAT --to-destination $UDP_PORT
+	ip6tables -t nat -A PREROUTING -i $(ip -4 route ls|grep default|grep -Po '(?<=dev )(\S+)'|head -1) -p udp --dport 10000:50000 -j DNAT --to-destination $UDP_PORT
 	sysctl net.ipv4.conf.all.rp_filter=0
 	sysctl net.ipv4.conf.$(ip -4 route ls|grep default|grep -Po '(?<=dev )(\S+)'|head -1).rp_filter=0 
 	echo "net.ipv4.ip_forward = 1
