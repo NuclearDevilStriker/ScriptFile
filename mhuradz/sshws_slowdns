@@ -18,8 +18,14 @@ echo '
    ╚═════╝ ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝  
  '
 echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
-read -p "Please enter host for slowdns: " NS
+echo ""
+read -p "Please enter ns host for Slowdns: " NS
 echo $NS > /root/ns.txt
+echo ""
+echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
+echo -e " \033[0;31m Wait 10 Seconds to Start Installing!!!!\033[0m"
+echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
+sleep 10
 
 startinstall(){
 apt-get update
