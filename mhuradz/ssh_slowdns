@@ -56,7 +56,7 @@ INFO_HOST=$(echo DEXTER | awk '{print toupper($0)}' | figlet -tc -f block)
 # RUN IT ALL THROUGH lolcat FOR COLORING
 # NOTE: needs -f to force color output since intermediate file is not a TTY
 printf "%s\n%s\n" "$INFO_HOST" | $LOLCAT -f
-/usr/bin/screenfetch
+#/usr/bin/screenfetch
 EOM
 
 chmod -x /etc/update-motd.d/*
