@@ -51,7 +51,7 @@ LOLCAT=/usr/games/lolcat
 INFO_HOST=$(echo DEXTER | awk '{print toupper($0)}' | figlet -tc -f block)
 
 # GET OS/ARCH/DATE, APPLY FIGLET FONT "term" AND CENTERING
-#INFO_OS=$(printf "%s (%s)\n%s" "$DISTRIB_DESCRIPTION" "$(uname -r)" "$(date)" | figlet -tc -f term)
+# INFO_OS=$(printf "%s (%s)\n%s" "$DISTRIB_DESCRIPTION" "$(uname -r)" "$(date)" | figlet -tc -f term)
 
 # RUN IT ALL THROUGH lolcat FOR COLORING
 # NOTE: needs -f to force color output since intermediate file is not a TTY
