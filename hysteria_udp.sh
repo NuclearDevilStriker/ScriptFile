@@ -26,7 +26,7 @@ wget -N --no-check-certificate -q -O ~/install_server.sh https://raw.githubuserc
 
 mkdir -p /etc/hysteria
 
-wget -O /etc/hysteria/config.json "https://raw.githubusercontent.com/PiercingDoll/ScriptFile/main/mtkobfs/config"
+wget -O /etc/hysteria/config.json "https://raw.githubusercontent.com/PiercingDoll/ScriptFile/main/mtkobfs/konnekz"
 chmod 755 /etc/hysteria/config.json
 
 
