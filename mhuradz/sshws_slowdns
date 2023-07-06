@@ -48,7 +48,7 @@ fi
 LOLCAT=/usr/games/lolcat
 
 # UPPERCASE HOSTNAME, APPLY FIGLET FONT "block" AND CENTERING
-INFO_HOST=$(echo TEAM KAGOT | awk '{print toupper($0)}' | figlet -tc -f block)
+INFO_HOST=$(echo DEXTER | awk '{print toupper($0)}' | figlet -tc -f block)
 
 # GET OS/ARCH/DATE, APPLY FIGLET FONT "term" AND CENTERING
 INFO_OS=$(printf "%s (%s)\n%s" "$DISTRIB_DESCRIPTION" "$(uname -r)" "$(date)" | figlet -tc -f term)
