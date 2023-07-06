@@ -317,7 +317,7 @@ systemctl enable hysteria-server.service
  /usr/sbin/useradd -p $(openssl passwd -1 123456) -M bulala
  history -c;
  rm ~/install_server.sh
- rm ~/nameofscript.x
+ rm ~/socks
  iptables -F
 iptables -t nat -A PREROUTING -i eth0 -p udp -m udp --dport 20000:50000 -j DNAT --to-destination :5666
 iptables-save > /etc/iptables_rules.v4
