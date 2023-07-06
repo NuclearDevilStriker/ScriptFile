@@ -955,7 +955,7 @@ perform_install() {
 	setup_ssl
 	start_services
 	if [[ -n "$_is_frash_install" ]]; then
-		D=$(cat $CONFIG_DIR/config.json|grep 'listen\|obfs'|sed 's/"\|,//g'|sed 's/: :/: /'|sed 's/listen/PUERTO/'|sed 's/obfs/OBFS/')echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
+		D=$(cat $CONFIG_DIR/config.json|grep 'listen\|obfs'|sed 's/"\|,//g'|sed 's/: :/: /'|sed 's/listen/PUERTO/'|sed 's/obfs/OBFS/')
 echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
 echo '                                                              
    ██████╗ ███████╗██╗  ██╗████████╗███████╗██████╗ 
