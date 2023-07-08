@@ -21,7 +21,7 @@ echo '
  '
 echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
 echo ""
-read -p "Please enter ns host for Slowdns: " nameserver
+read -p "Please enter dns HOST: " nameserver
 echo $nameserver > /root/nameserver.txt
 echo ""
 echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
@@ -736,12 +736,7 @@ iptables -t nat -X
 iptables -t mangle -F
 iptables -t mangle -X
 sed -i 's/ENABLED=0/ENABLED=1/g' /etc/default/stunnel4
-iptables -A INPUT -i eth0 -p udp --dport 53 -j ACCEPT
-iptables -A INPUT -i eth0 -p udp --dport 5300 -j ACCEPT
-iptables -A INPUT -i ens3 -p udp --dport 53 -j ACCEPT
-iptables -A INPUT -i ens3 -p udp --dport 5300 -j ACCEPT
-iptables -A PREROUTING -t nat -i eth0 -p udp --dport 53 -j REDIRECT --to-port 5300
-iptables -A PREROUTING -t nat -i ens3 -p udp --dport 53 -j REDIRECT --to-port 5300
+
 
 cat <<\EOM >/root/auto
 #!/bin/bash
@@ -793,12 +788,6 @@ echo "SHELL=/bin/bash
 0 * * * * /bin/bash /bin/dnsttauto.sh >/dev/null 2>&1" | crontab -
 }
 
-function Slowdns() {
-rm -rf install; wget https://raw.githubusercontent.com/MtkVpnDev/Slowdns/main/install; chmod +x install; ./install
-bash /etc/slowdns/slowdns-ssh
-startdns
-}
-
 display_menu () {
 clear
 echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
@@ -818,19 +807,13 @@ echo -e " \e[92m All Service Now are Running!!!!\e[0m \e[97m:\e[0m"
 echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
 echo -e " \e[92m SERVICE PORT:\e[0m \e[97m:\e[0m" 
 echo ""
+echo -e " \e[92m Websocket Host:\e[0m \e[97m: $nameserver\e[0m" 
 echo -e " \e[92m SSH:\e[0m \e[97m: 22\e[0m" 
 echo -e " \e[92m DROPBEAR:\e[0m \e[97m: 442\e[0m" 
 echo -e " \e[92m Proxy:\e[0m \e[97m: 8080 , 8010\e[0m" 
 echo -e " \e[92m WEBSOCKET/SSH:\e[0m \e[97m: 80\e[0m" 
 echo -e " \e[92m WEBSOCKET/SSL:\e[0m \e[97m: 443\e[0m"
 echo -e " \e[92m STUNNEL:\e[0m \e[97m: 443\e[0m" 
-echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
-echo -e " \e[92m SlowDns Configuration:\e[0m \e[97m:\e[0m" 
-echo ""
-echo -e " \e[92m SLOWDNS PORT:\e[0m \e[97m: 2222\e[0m" 
-echo -e " \e[92m SLOWCHAVE KEY:\e[0m \e[97m" && cat /root/server.pub
-echo -e " \e[92m NAMESERVER:\e[0m \e[97m: $nameserver\e[0m" 
-echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
 echo -e ""
 echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
 echo -e " \033[0;31m To Create Account Just Type: dextermenu\033[0m"
@@ -1083,7 +1066,6 @@ chmod +x /usr/local/sbin/*
 
 
 startinstall
-Slowdns
 controls
 clear
 display_menu
