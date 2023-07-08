@@ -640,14 +640,64 @@ socket = a:SO_REUSEADDR=1
 socket = l:TCP_NODELAY=1
 socket = r:TCP_NODELAY=1
 
-
 [dropbear]
 accept = 443
 connect = 127.0.0.1:442
-
 EOF
 
 service stunnel4 restart
+
+printf "%b\n" "\e[32m[\e[0mInfo\e[32m]\e[0m\e[97m running Iptables configuration on background\e[0m"
+cat <<'iptEOF'> /tmp/iptables-config.bash
+#!/bin/bash
+function ip_address(){
+  local IP="$( ip addr | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -Ev "^192\.168|^172\.1[6-9]\.|^172\.2[0-9]\.|^172\.3[0-2]\.|^10\.|^127\.|^255\.|^0\." | head -n 1 )"
+  [ -z "${IP}" ] && IP="$(curl -4s ipv4.icanhazip.com)"
+  [ -z "${IP}" ] && IP="$(curl -4s ipinfo.io/ip)"
+  [ ! -z "${IP}" ] && echo "${IP}" || echo 'ipaddress'
+}
+IPADDR="$(ip_address)"
+PNET="$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1)"
+CIDR="172.29.0.0/16"
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -P OUTPUT ACCEPT
+iptables -t nat -F
+iptables -t mangle -F
+iptables -F
+iptables -X
+iptables -A INPUT -s $IPADDR -p tcp -m multiport --dport 1:65535 -j ACCEPT
+iptables -A INPUT -s $IPADDR -p udp -m multiport --dport 1:65535 -j ACCEPT
+iptables -A INPUT -p tcp --dport 25 -j REJECT   
+iptables -A FORWARD -p tcp --dport 25 -j REJECT
+iptables -A OUTPUT -p tcp --dport 25 -j REJECT
+iptables -I FORWARD -s $CIDR -j ACCEPT
+iptables -t nat -A POSTROUTING -s $CIDR -o $PNET -j MASQUERADE
+iptables -t nat -A POSTROUTING -s $CIDR -o $PNET -j SNAT --to-source $IPADDR
+iptables -A INPUT -m string --algo bm --string "BitTorrent" -j REJECT
+iptables -A INPUT -m string --algo bm --string "BitTorrent protocol" -j REJECT
+iptables -A INPUT -m string --algo bm --string ".torrent" -j REJECT
+iptables -A INPUT -m string --algo bm --string "torrent" -j REJECT
+iptables -A INPUT -m string --string "BitTorrent" --algo kmp -j REJECT
+iptables -A INPUT -m string --string "BitTorrent protocol" --algo kmp -j REJECT
+iptables -A INPUT -m string --string "bittorrent-announce" --algo kmp -j REJECT
+iptables -A FORWARD -m string --algo bm --string "BitTorrent" -j REJECT
+iptables -A FORWARD -m string --algo bm --string "BitTorrent protocol" -j REJECT
+iptables -A FORWARD -m string --algo bm --string ".torrent" -j REJECT
+iptables -A FORWARD -m string --algo bm --string "torrent" -j REJECT
+iptables -A FORWARD -m string --string "BitTorrent" --algo kmp -j REJECT
+iptables -A FORWARD -m string --string "BitTorrent protocol" --algo kmp -j REJECT
+iptables -A FORWARD -m string --string "bittorrent-announce" --algo kmp -j REJECT
+iptables -A OUTPUT -m string --algo bm --string "BitTorrent" -j REJECT
+iptables -A OUTPUT -m string --algo bm --string "BitTorrent protocol" -j REJECT
+iptables -A OUTPUT -m string --algo bm --string ".torrent" -j REJECT
+iptables -A OUTPUT -m string --algo bm --string "torrent" -j REJECT
+iptables -A OUTPUT -m string --string "BitTorrent" --algo kmp -j REJECT
+iptables -A OUTPUT -m string --string "BitTorrent protocol" --algo kmp -j REJECT
+iptables -A OUTPUT -m string --string "bittorrent-announce" --algo kmp -j REJECT
+iptables-save > /etc/iptables/rules.v4
+iptEOF
+screen -S configIptables -dm bash -c "bash /tmp/iptables-config.bash && rm -f /tmp/iptables-config.bash"
 
 wget --no-check-certificate 165.22.97.197/badvpn-udpgw -q
 mv -f badvpn-udpgw /bin/badvpn-udpgw
