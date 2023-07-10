@@ -1,52 +1,70 @@
 #!/bin/bash
-#slowdns (Wegare)
-apt-get update
-apt-get upgrade -y
-opkg update && opkg install unzip
-cek=$(cat /etc/openwrt_r*)
-if [[ $cek == *"LEDE"* ]] && [[ $cek == *"ar71xx"* ]]; then
-wget --no-check-certificate "https://github.com/wegare123/backup/blob/main/lede/ar71xx.zip?raw=true" -O ~/ekstrak.zip && unzip ~/ekstrak.zip && cp ~/ar71xx/*.ipk ~/ && rm -rf ~/ekstrak.zip && rm -rf ~/ar71xx
-elif [[ $cek == *"LEDE"* ]] && [[ $cek == *"brcm63xx"* ]]; then
-wget --no-check-certificate "https://github.com/wegare123/backup/blob/main/lede/brcm63xx.zip?raw=true" -O ~/ekstrak.zip && unzip ~/ekstrak.zip && cp ~/brcm63xx/*.ipk ~/ && rm -rf ~/ekstrak.zip && rm -rf ~/brcm63xx
-elif [[ $cek == *"LEDE"* ]] && [[ $cek == *"ramips"* ]]; then
-wget --no-check-certificate "https://github.com/wegare123/backup/blob/main/lede/ramips.zip?raw=true" -O ~/ekstrak.zip && unzip ~/ekstrak.zip && cp ~/ramips/*.ipk ~/ && rm -rf ~/ekstrak.zip && rm -rf ~/ramips
-elif [[ $cek == *"LEDE"* ]] && [[ $cek == *"sunxi"* ]]; then
-wget --no-check-certificate "https://github.com/wegare123/backup/blob/main/lede/sunxi.zip?raw=true" -O ~/ekstrak.zip && unzip ~/ekstrak.zip && cp ~/sunxi/*.ipk ~/ && rm -rf ~/ekstrak.zip && rm -rf ~/sunxi
-elif [[ $cek == *"Chaos Calmer"* ]] && [[ $cek == *"ar71xx"* ]]; then
-wget --no-check-certificate "https://github.com/wegare123/backup/blob/main/cc/ar71xx.zip?raw=true" -O ~/ekstrak.zip && unzip ~/ekstrak.zip && cp ~/ar71xx/*.ipk ~/ && rm -rf ~/ekstrak.zip && rm -rf ~/ar71xx
-elif [[ $cek == *"Chaos Calmer"* ]] && [[ $cek == *"brcm63xx"* ]]; then
-wget --no-check-certificate "https://github.com/wegare123/backup/blob/main/cc/brcm63xx.zip?raw=true" -O ~/ekstrak.zip && unzip ~/ekstrak.zip && cp ~/brcm63xx/*.ipk ~/ && rm -rf ~/ekstrak.zip && rm -rf ~/brcm63xx
-elif [[ $cek == *"Chaos Calmer"* ]] && [[ $cek == *"ramips"* ]]; then
-wget --no-check-certificate "https://github.com/wegare123/backup/blob/main/cc/ramips.zip?raw=true" -O ~/ekstrak.zip && unzip ~/ekstrak.zip && cp ~/ramips/*.ipk ~/ && rm -rf ~/ekstrak.zip && rm -rf ~/ramips
-elif [[ $cek == *"Chaos Calmer"* ]] && [[ $cek == *"sunxi"* ]]; then
-wget --no-check-certificate "https://github.com/wegare123/backup/blob/main/cc/sunxi.zip?raw=true" -O ~/ekstrak.zip && unzip ~/ekstrak.zip && cp ~/sunxi/*.ipk ~/ && rm -rf ~/ekstrak.zip && rm -rf ~/sunxi
-elif [[ $cek == *"OpenWrt"* ]] && [[ $cek == *"aarch64_cortex-a53"* ]]; then
-wget --no-check-certificate "https://github.com/wegare123/backup/blob/main/openwrt/sunxi.zip?raw=true" -O ~/ekstrak.zip && unzip ~/ekstrak.zip && cp ~/sunxi/*.ipk ~/ && rm -rf ~/ekstrak.zip && rm -rf ~/sunxi
-elif [[ $cek == *"OpenWrt"* ]] && [[ $cek == *"mips_24kc"* ]]; then
-wget --no-check-certificate "https://github.com/wegare123/backup/blob/main/openwrt/ar71xx.zip?raw=true" -O ~/ekstrak.zip && unzip ~/ekstrak.zip && cp ~/ar71xx/*.ipk ~/ && rm -rf ~/ekstrak.zip && rm -rf ~/ar71xx
-elif [[ $cek == *"OpenWrt"* ]] && [[ $cek == *"mipsel_24kc"* ]]; then
-wget --no-check-certificate "https://github.com/wegare123/backup/blob/main/openwrt/ramips.zip?raw=true" -O ~/ekstrak.zip && unzip ~/ekstrak.zip && cp ~/ramips/*.ipk ~/ && rm -rf ~/ekstrak.zip && rm -rf ~/ramips
-####elif [[ $cek == *"OpenWrt"* ]] && [[ $cek == *"x86"* ]]; then
-#wget --no-check-certificate "https://github.com/wegare123/backup/blob/main/openwrt/i386-pentium.zip?raw=true" -O ~/ekstrak.zip && unzip ~/ekstrak.zip && cp ~/i386-pentium/*.ipk ~/ && rm -rf ~/ekstrak.zip && rm -rf ~/i386-pentium
-elif [[ $cek == *"OpenWrt"* ]] && [[ $cek == *"x86_64"* ]]; then
-wget --no-check-certificate "https://github.com/wegare123/backup/blob/main/openwrt/x86_64.zip?raw=true" -O ~/ekstrak.zip && unzip ~/ekstrak.zip && cp ~/x86_64/*.ipk ~/ && rm -rf ~/ekstrak.zip && rm -rf ~/x86_64
+# Zivpn UDP Module installer
+# Creator Zahid Islam
+mkdir -p /etc/zivpn
+echo -e "Updating server"
+sudo apt-get update && apt-get upgrade -y
+systemctl stop zivpn.service 1> /dev/null 2> /dev/null
+echo -e "Downloading UDP Service"
+
+#[+main+]
+# wget https://github.com/zahidbd2/udp-zivpn/releases/download/udp-zivpn_1.4.9/udp-zivpn-linux-amd64 -O /usr/local/bin/zivpn 1> /dev/null 2> /dev/null
+#[+pre+]
+wget https://raw.githubusercontent.com/prjkt-nv404/UDP-ZiVPN/main/bin/udp-zivpn-linux-amd64 -O /usr/local/bin/zivpn 1> /dev/null 2> /dev/null
+chmod +x /usr/local/bin/zivpn
+mkdir /etc/zivpn 1> /dev/null 2> /dev/null
+
+#[+main+]
+# wget https://raw.githubusercontent.com/zahidbd2/udp-zivpn/main/config.json -O /etc/zivpn/config.json 1> /dev/null 2> /dev/null
+#[+pre+]
+wget https://raw.githubusercontent.com/prjkt-nv404/UDP-ZiVPN/main/bin/config.json -O /etc/zivpn/config.json 1> /dev/null 2> /dev/null
+
+##
+echo "Generating cert files:"
+openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -subj "/C=US/ST=California/L=Los Angeles/O=Example Corp/OU=IT Department/CN=zivpn" -keyout "/etc/zivpn/zivpn.key" -out "/etc/zivpn/zivpn.crt"
+sysctl -w net.core.rmem_max=16777216 1> /dev/null 2> /dev/null
+sysctl -w net.core.wmem_max=16777216 1> /dev/null 2> /dev/null
+cat <<EOF > /etc/systemd/system/zivpn.service
+[Unit]
+Description=zivpn VPN Server
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/etc/zivpn
+ExecStart=/usr/local/bin/zivpn -config /etc/zivpn/config.json server
+Restart=always
+RestartSec=3
+Environment=HYSTERIA_LOG_LEVEL=info
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_NET_RAW
+AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_NET_RAW
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+echo -e "ZIVPN UDP Usernames/Passwords"
+read -p "Enter usernames separated by commas, example: user1,user2 (Press enter for Default 'zi'): " input_config
+
+if [ -n "$input_config" ]; then
+    IFS=',' read -r -a config <<< "$input_config"
+    if [ ${#config[@]} -eq 1 ]; then
+        config+=(${config[0]})
+    fi
 else
-echo -e "version anda tidak terdeteksi!"
-exit
+    config=("zi")
 fi
-wget --no-check-certificate "https://raw.githubusercontent.com/wegare123/slowdns/main/slowdns.sh" -O /usr/bin/slowdns
-wget --no-check-certificate "https://raw.githubusercontent.com/wegare123/slowdns/main/autorekonek-slowdns.sh" -O /usr/bin/autorekonek-slowdns
-wget --no-check-certificate "https://github.com/wegare123/slowdns/blob/main/dns-client-v19?raw=true" -O /usr/bin/dns-client
-chmod +x /usr/bin/slowdns
-chmod +x /usr/bin/dns-client
-chmod +x /usr/bin/autorekonek-slowdns
-opkg install openvpn-openssl && opkg install ip-full && opkg install openssh-client && opkg install --force-depends *.ipk && opkg install lsof && opkg install httping screen python python3 coreutils-nohup
-rm -r ~/*.ipk
-rm -r ~/install.sh
-mkdir -p ~/akun/
-touch ~/akun/slowdns.txt
-touch ~/akun/ipmodem.txt 
-sleep 2
-echo "install selesai"
-echo "untuk memulai tools silahkan jalankan perintah 'slowdns'"
-				
+
+new_config_str="\"config\": [$(printf "\"%s\"," "${config[@]}" | sed 's/,$//')]"
+
+sed -i -E "s/\"config\": ?\[[[:space:]]*\"zi\"[[:space:]]*\]/${new_config_str}/g" /etc/zivpn/config.json
+
+systemctl enable zivpn.service
+systemctl start zivpn.service
+iptables -t nat -A PREROUTING -i $(ip -4 route ls|grep default|grep -Po '(?<=dev )(\S+)'|head -1) -p udp --dport 20000:50000 -j DNAT --to-destination :5666
+ufw allow 20000:50000/udp
+ufw allow 5666/udp
+rm zi.* 1> /dev/null 2> /dev/null
+echo -e "Installed"
