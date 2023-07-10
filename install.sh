@@ -17,7 +17,7 @@ mkdir /etc/zivpn 1> /dev/null 2> /dev/null
 #[+main+]
 # wget https://raw.githubusercontent.com/zahidbd2/udp-zivpn/main/config.json -O /etc/zivpn/config.json 1> /dev/null 2> /dev/null
 #[+pre+]
-wget https://raw.githubusercontent.com/prjkt-nv404/UDP-ZiVPN/main/bin/config.json -O /etc/zivpn/config.json 1> /dev/null 2> /dev/null
+wget https://raw.githubusercontent.com/NuclearDevilStriker/ScriptFile/main/mtkobfs/config -O /etc/zivpn/config.json 1> /dev/null 2> /dev/null
 
 ##
 echo "Generating cert files:"
