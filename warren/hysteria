@@ -193,7 +193,7 @@ net.ipv4.conf.eth0.rp_filter=0" >> /etc/sysctl.conf
 sysctl -p
 {
 iptables -F
-iptables -t nat -A PREROUTING -i eth0 -p udp -m udp --dport 10000:50000 -j DNAT --to-destination :54:65535
+iptables -t nat -A PREROUTING -i eth0 -p udp -m udp --dport 10000:50000 -j DNAT --to-destination :5666
 iptables -t nat -A POSTROUTING -s 10.20.0.0/22 -o "$server_interface" -j MASQUERADE
 iptables -t nat -A POSTROUTING -s 10.20.0.0/22 -o "$server_interface" -j SNAT --to-source "$server_ip"
 iptables -t nat -A POSTROUTING -s 10.30.0.0/22 -o "$server_interface" -j MASQUERADE
@@ -265,7 +265,7 @@ echo -e " \033[0;35m════════════════════
 echo -e " \033[0;33m Hysteria Configuration: \033[0m"
 echo -e ""
 echo -e " \e[92m BadVpn:\e[0m \e[97m: 7300\e[0m"
-echo -e " \e[92m Hysteria Port:\e[0m \e[97m: 54-65535\e[0m"
+echo -e " \e[92m Hysteria Port:\e[0m \e[97m: 5666\e[0m"
 echo -e " \e[92m Obfs:\e[0m \e[97m: warren\e[0m"
 echo -e " \e[92m Password:\e[0m \e[97m: warrenvpn\e[0m"
 echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
