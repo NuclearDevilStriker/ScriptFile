@@ -1,0 +1,13 @@
+{
+  "listen": ":54-65535",
+  "cert": "/etc/hysteria/server.crt",
+  "key": "/etc/hysteria/server.key",
+  "up_mbps": 100,
+  "down_mbps": 100,
+  "disable_udp": false,
+  "obfs": "warren",
+  "auth": {
+    "mode": "passwords",
+    "config": ["warrenvpn"]
+  }
+}
