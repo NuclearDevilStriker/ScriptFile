@@ -1,5 +1,5 @@
 {
-  "listen": ":54-65535",
+  "listen": ":54:65535",
   "cert": "/etc/hysteria/server.crt",
   "key": "/etc/hysteria/server.key",
   "up_mbps": 100,
