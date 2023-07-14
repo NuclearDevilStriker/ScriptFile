@@ -67,9 +67,16 @@ if [ "" = "$PKG_OK" ]; then
   sleep 1
   echo -e "[ ${tyblue}NOTES${NC} ] After rebooting"
   sleep 3
-  echo -e "[ ${tyblue}NOTES${NC} ] Then run this script again"
-  echo -e "[ ${tyblue}NOTES${NC} ] Notes, Script By : telegram @lukavpn"
-  echo -e "[ ${tyblue}NOTES${NC} ] if you understand then tap enter now.."
+  echo -e "\033[1;31m══════════════════════════════════════════════════\033[0m"
+echo '                                                              
+      ██████╗ ███████╗██╗  ██╗████████╗███████╗██████╗ 
+      ██╔══██╗██╔════╝╚██╗██╔╝╚══██╔══╝██╔════╝██╔══██╗
+      ██║  ██║█████╗   ╚███╔╝    ██║   █████╗  ██████╔╝
+      ██║  ██║██╔══╝   ██╔██╗    ██║   ██╔══╝  ██╔══██╗
+      ██████╔╝███████╗██╔╝ ██╗   ██║   ███████╗██║  ██║
+      ╚═════╝ ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝  
+ '
+echo -e "\033[1;31m═══════════════════════════════════════════════════\033[0m"
   sleep 2
   read
 else
@@ -91,7 +98,7 @@ secs_to_human() {
     echo "Installation time : $(( ${1} / 3600 )) hours $(( (${1} / 60) % 60 )) minute's $(( ${1} % 60 )) seconds"
 }
 start=$(date +%s)
-ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
+ln -fs /usr/share/zoneinfo/Asia/Manila /etc/localtime
 sysctl -w net.ipv6.conf.all.disable_ipv6=1 >/dev/null 2>&1
 sysctl -w net.ipv6.conf.default.disable_ipv6=1 >/dev/null 2>&1
 
@@ -142,9 +149,16 @@ echo "--------------------------------------------------------------------------
 echo -e "[ ${green}INFO${NC} ] Add Domain You Domain Pointing IP Adrress For VMess/vless/trojan dll"
 echo "-----------------------------------------------------------------------------------"
 echo ""
-echo "-------------------------------------"
-echo "     SCRIPT BY SSH JRTUNNEL NETWORK  "
-echo "-------------------------------------"
+echo -e "\033[1;31m══════════════════════════════════════════════════\033[0m"
+echo '                                                              
+      ██████╗ ███████╗██╗  ██╗████████╗███████╗██████╗ 
+      ██╔══██╗██╔════╝╚██╗██╔╝╚══██╔══╝██╔════╝██╔══██╗
+      ██║  ██║█████╗   ╚███╔╝    ██║   █████╗  ██████╔╝
+      ██║  ██║██╔══╝   ██╔██╗    ██║   ██╔══╝  ██╔══██╗
+      ██████╔╝███████╗██╔╝ ██╗   ██║   ███████╗██║  ██║
+      ╚═════╝ ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝  
+ '
+echo -e "\033[1;31m═══════════════════════════════════════════════════\033[0m"
 read -rp "Input your domain : " -e pp
 echo "$pp" > /root/domain
 echo "$pp" > /root/scdomain
@@ -189,7 +203,16 @@ EOF
     
 #install ssh ovpn
 sleep 1
-echo -e "$yell[SERVICE]$NC SCRIPT lukavpn.lol"
+echo -e "\033[1;31m══════════════════════════════════════════════════\033[0m"
+echo '                                                              
+      ██████╗ ███████╗██╗  ██╗████████╗███████╗██████╗ 
+      ██╔══██╗██╔════╝╚██╗██╔╝╚══██╔══╝██╔════╝██╔══██╗
+      ██║  ██║█████╗   ╚███╔╝    ██║   █████╗  ██████╔╝
+      ██║  ██║██╔══╝   ██╔██╗    ██║   ██╔══╝  ██╔══██╗
+      ██████╔╝███████╗██╔╝ ██╗   ██║   ███████╗██║  ██║
+      ╚═════╝ ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝  
+ '
+echo -e "\033[1;31m═══════════════════════════════════════════════════\033[0m"
 sleep 1
 echo -e "[ ${green}ok${NC} ] Install SSH & VPN"
 sleep 1
