@@ -3,9 +3,9 @@ error_reporting(E_ERROR | E_PARSE);
 ini_set('display_errors', '1');
 
 $DB_host = "185.61.137.171";
-$DB_user = "mediatek2_testmic";
+$DB_user = "mediatek2_getorssh";
 $DB_pass = "F1005r90@";
-$DB_name = "mediatek2_testmic";
+$DB_name = "mediatek2_getorssh";
 
 $mysqli = new MySQLi($DB_host,$DB_user,$DB_pass,$DB_name);
 if ($mysqli->connect_error) {
