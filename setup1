@@ -20,7 +20,7 @@ read -rp "Enter your Domain: " -e domain
 
 read -rp "Enter your Subdomain: " -e sub
 SUB_DOMAIN=${sub}.${domain}
-NS_DOMAIN=mediatek-${SUB_DOMAIN}
+NS_DOMAIN=${SUB_DOMAIN}
 echo $NS_DOMAIN > /root/nsdomain
 
 nameserver=$(cat /root/nsdomain)
