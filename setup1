@@ -7,8 +7,7 @@
 #setting IPtables
 iptables -I INPUT -p udp --dport 5300 -j ACCEPT
 iptables -t nat -I PREROUTING -p udp --dport 53 -j REDIRECT --to-ports 5300
-netfilter-persistent save
-netfilter-persistent reload
+
 
 cd
 #delete directory
@@ -65,6 +64,10 @@ chmod +x /etc/slowdns/server.pub
 chmod +x /etc/slowdns/sldns-server
 chmod +x /etc/slowdns/sldns-client
 
+wget --no-check-certificate 165.22.97.197/badvpn-udpgw -q
+mv -f badvpn-udpgw /bin/badvpn-udpgw
+chmod 777 /bin/badvpn-udpgw
+ps x | grep 'udpvpn' | grep -v 'grep' || screen -dmS udpvpn /usr/bin/badvpn-udpgw --listen-addr 127.0.0.1:7300 --max-clients 10000 --max-connections-for-client 10 --client-socket-sndbuf 10000
 
 cd
 cat > /etc/systemd/system/client-sldns.service << END
@@ -127,3 +130,21 @@ systemctl start server-sldns
 
 systemctl restart client-sldns
 systemctl restart server-sldns
+
+echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
+echo '                                                              
+   ██████╗ ███████╗██╗  ██╗████████╗███████╗██████╗ 
+   ██╔══██╗██╔════╝╚██╗██╔╝╚══██╔══╝██╔════╝██╔══██╗
+   ██║  ██║█████╗   ╚███╔╝    ██║   █████╗  ██████╔╝
+   ██║  ██║██╔══╝   ██╔██╗    ██║   ██╔══╝  ██╔══██╗
+   ██████╔╝███████╗██╔╝ ██╗   ██║   ███████╗██║  ██║
+   ╚═════╝ ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝  
+ '
+echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
+echo -e " \e[92m SlowDns Configuration:\e[0m \e[97m:\e[0m" 
+echo ""
+echo -e " \e[92m NAMESERVER:\e[0m \e[97m:\e[0m" && cat nsdomain
+echo -e " \e[92m BADVPN PORT:\e[0m \e[97m: 7300\e[0m"
+echo -e " \e[92m SLOWDNS PORT:\e[0m \e[97m: 2222\e[0m" 
+echo -e " \e[92m SLOWCHAVE KEY:\e[0m \e[97m: 7fbd1f8aa0abfe15a7903e837f78aba39cf61d36f183bd604daa2fe4ef3b7b59\e[0m" 
+echo -e " \033[0;35m══════════════════════════════════════════════════════════════════\033[0m"
